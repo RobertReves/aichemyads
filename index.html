@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LiftUp Media — AI alapú marketing ügynökség</title>
+  <meta name="description" content="AI alapú marketing ügynökség: teljesítményfókuszú kampányok, kreatív tartalom, analitika.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="#kezdolap" class="brand">
+      <img src="assets/logo.png" alt="LiftUp Media logó" class="brand-logo" onerror="this.style.display='none'">
+      <span class="brand-name">LiftUp Media</span>
+    </a>
+    <button class="nav-toggle" aria-label="Menü váltása">☰</button>
+    <nav class="site-nav" id="site-nav">
+      <a href="#rolunk">Rólunk</a>
+      <a href="#szolgaltatasok">Szolgáltatások</a>
+      <a href="#munkak">Munkáink</a>
+      <a href="#kapcsolat">Kapcsolat</a>
+    </nav>
+  </header>
+
+  <main id="kezdolap">
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>Emeljük fel a márkádat.</h1>
+        <p>AI-alapú teljesítmény marketing: okos kampányok, szép kreatívok, tiszta eredmények.</p>
+        <div class="cta-group">
+          <a class="btn primary" href="#kapcsolat">Kapcsolatfelvétel</a>
+          <a class="btn ghost" href="#munkak">Nézd meg a munkáinkat</a>
+        </div>
+      </div>
+      <div class="hero-bg" aria-hidden="true"></div>
+    </section>
+
+    <section id="rolunk" class="section">
+      <div class="container two-col">
+        <div>
+          <h2>Kik vagyunk</h2>
+          <p>
+            A LiftUp Media egy kis, fókuszált csapat: adatvezérelt szemlélet, gyors kivitelezés, 
+            letisztult vizuál. Nem bonyolítjuk túl: a cél, hogy <strong>több ügyfelet</strong> és
+            <strong>jobb megtérülést</strong> hozzunk.
+          </p>
+          <ul class="bullets">
+            <li>AI-eszközökkel optimalizált hirdetések</li>
+            <li>Landing oldalak és kreatívok A/B tesztje</li>
+            <li>Átlátható riportok és mérhető eredmények</li>
+          </ul>
+        </div>
+        <figure class="card">
+          <img src="assets/gallery1.png" alt="Csapatmunka illusztráció">
+        </figure>
+      </div>
+    </section>
+
+    <section id="szolgaltatasok" class="section muted">
+      <div class="container">
+        <h2>Szolgáltatások</h2>
+        <div class="grid cards">
+          <article class="card">
+            <h3>Kampánykezelés</h3>
+            <p>Meta, Google, TikTok — AI-alapú célzás, folyamatos optimalizálás.</p>
+          </article>
+          <article class="card">
+            <h3>Kreatív &amp; tartalom</h3>
+            <p>Hirdetésképek, rövid videók, landing szövegek — gyors iterációval.</p>
+          </article>
+          <article class="card">
+            <h3>Analitika</h3>
+            <p>Mérési beállítás, konverziókövetés, dashboardok, egyszerű riport.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="munkak" class="section">
+      <div class="container">
+        <h2>Munkáink</h2>
+        <div class="gallery">
+          <img src="assets/gallery1.png" alt="Galéria kép 1">
+          <img src="assets/gallery2.png" alt="Galéria kép 2">
+          <img src="assets/gallery3.png" alt="Galéria kép 3">
+          <img src="assets/gallery4.png" alt="Galéria kép 4">
+        </div>
+      </div>
+    </section>
+
+    <section id="kapcsolat" class="section muted">
+      <div class="container two-col">
+        <div>
+          <h2>Kapcsolat</h2>
+          <p>Írj nekünk, és 24 órán belül válaszolunk.</p>
+          <ul class="contact">
+            <li>✉️ <a href="mailto:hello@liftupmedia.hu">hello@liftupmedia.hu</a></li>
+            <li>📞 <a href="tel:+3612345678">+36 1 234 5678</a></li>
+            <li>💼 <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Gyors üzenet</h3>
+          <p>Statikus oldalon nincs űrlapküldés — használj emailt vagy LinkedIn-t.</p>
+          <p class="hint">Tipp: ha később szeretnél űrlapot, kapcsolható be pl. Formspree.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> LiftUp Media • Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
