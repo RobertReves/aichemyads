@@ -414,6 +414,25 @@
       left: 22px; width: 4px; height: 4px; background: var(--text-dim); opacity: 0.4;
     }
 
+    /* Changelog show more */
+    .changelog-panel .changelog-version.cl-hidden { display: none; }
+    .changelog-show-more {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 16px; margin-top: 4px; border-radius: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      font-family: var(--font-display); font-size: 14px; font-weight: 700;
+      color: var(--text-muted); cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+    .changelog-show-more:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: var(--bg-card-hover); transform: translateY(-2px);
+    }
+    .changelog-show-more svg {
+      width: 16px; height: 16px; transition: transform 0.3s var(--ease);
+    }
+    .changelog-show-more.expanded svg { transform: rotate(180deg); }
+
     /* ═══════════════ REVIEWS ═══════════════ */
     .reviews-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
@@ -616,6 +635,51 @@
       .gallery-btn { width: 34px; height: 34px; }
     }
 
+    /* ═══════════════ AGE GATE ═══════════════ */
+    .age-gate {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(8, 8, 10, 0.85);
+      backdrop-filter: blur(30px) saturate(0.8);
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .age-gate.dismissed { opacity: 0; visibility: hidden; pointer-events: none; }
+    .age-gate-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px; text-align: center;
+      max-width: 420px; width: 90%; position: relative; overflow: hidden;
+    }
+    .age-gate-card::before {
+      content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 300px; background: var(--accent);
+      filter: blur(100px); opacity: 0.08; border-radius: 50%; pointer-events: none;
+    }
+    .age-gate-icon {
+      width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 24px;
+      background: rgba(220, 50, 50, 0.1); border: 1px solid rgba(220, 50, 50, 0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 22px; font-weight: 800;
+      color: #e05555; position: relative;
+    }
+    .age-gate-card h2 {
+      font-family: var(--font-display); font-size: 22px; font-weight: 800;
+      letter-spacing: -0.02em; margin-bottom: 12px; position: relative;
+    }
+    .age-gate-card p {
+      color: var(--text-muted); font-size: 14px; line-height: 1.6;
+      margin-bottom: 28px; position: relative;
+    }
+    .age-gate-buttons { display: flex; gap: 12px; justify-content: center; position: relative; }
+    .age-gate-buttons .btn { min-width: 130px; justify-content: center; }
+    .btn-deny {
+      background: rgba(220, 50, 50, 0.1); border: 1px solid rgba(220, 50, 50, 0.25);
+      color: #e05555;
+    }
+    .btn-deny:hover {
+      background: rgba(220, 50, 50, 0.2); transform: translateY(-2px);
+    }
+    body.age-locked { overflow: hidden; }
+
     /* ═══════════════ SCROLLBAR ═══════════════ */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -630,7 +694,20 @@
     }
   </style>
 </head>
-<body>
+<body class="age-locked">
+
+  <!-- ═══════════ AGE GATE ═══════════ -->
+  <div class="age-gate" id="age-gate">
+    <div class="age-gate-card">
+      <div class="age-gate-icon">18+</div>
+      <h2>Age Verification Required</h2>
+      <p>This website contains adult content. By entering, you confirm that you are of legal age in your country to view such material.</p>
+      <div class="age-gate-buttons">
+        <button class="btn btn-primary" onclick="ageVerify(true)">Yes, I'm 18+</button>
+        <button class="btn btn-deny" onclick="ageVerify(false)">No, Leave</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════ HEADER ═══════════ -->
   <header class="site-header">
@@ -1431,6 +1508,22 @@
   </footer>
 
   <script>
+    // ═══════════ Age Gate ═══════════
+    function ageVerify(isAdult) {
+      if (isAdult) {
+        sessionStorage.setItem('bbg_age_verified', '1');
+        document.getElementById('age-gate').classList.add('dismissed');
+        document.body.classList.remove('age-locked');
+      } else {
+        window.location.href = 'https://www.google.com';
+      }
+    }
+    // Auto-dismiss if already verified this session
+    if (sessionStorage.getItem('bbg_age_verified') === '1') {
+      document.getElementById('age-gate').classList.add('dismissed');
+      document.body.classList.remove('age-locked');
+    }
+
     // ═══════════ Year ═══════════
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -1501,6 +1594,36 @@
     document.querySelectorAll('.changelog-version-header').forEach(header => {
       header.addEventListener('click', () => {
         header.closest('.changelog-version').classList.toggle('open');
+      });
+    });
+
+    // ═══════════ Changelog: show only 3 latest ═══════════
+    const CL_VISIBLE = 3;
+    document.querySelectorAll('.changelog-panel').forEach(panel => {
+      const versions = panel.querySelectorAll('.changelog-version');
+      if (versions.length <= CL_VISIBLE) return;
+
+      // Hide entries beyond the first 3
+      for (let i = CL_VISIBLE; i < versions.length; i++) {
+        versions[i].classList.add('cl-hidden');
+      }
+
+      // Create "Show more" button
+      const btn = document.createElement('button');
+      const hiddenCount = versions.length - CL_VISIBLE;
+      btn.className = 'changelog-show-more';
+      btn.innerHTML = 'Show ' + hiddenCount + ' older versions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+      // Insert after the 3rd entry
+      versions[CL_VISIBLE - 1].after(btn);
+
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.classList.toggle('expanded');
+        for (let i = CL_VISIBLE; i < versions.length; i++) {
+          versions[i].classList.toggle('cl-hidden', !isExpanded);
+        }
+        btn.innerHTML = isExpanded
+          ? 'Show less <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+          : 'Show ' + hiddenCount + ' older versions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
       });
     });
 
