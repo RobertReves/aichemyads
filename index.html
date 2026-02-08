@@ -289,28 +289,85 @@
     }
     .skills-list li:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ═══════════════ BLOG / NEWS ═══════════════ */
-    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .blog-card {
+    /* ═══════════════ CHANGELOG ═══════════════ */
+    .changelog-tabs {
+      display: flex; gap: 4px; margin-bottom: 32px;
+      border-bottom: 1px solid var(--border); padding-bottom: 0;
+    }
+    .changelog-tab {
+      font-family: var(--font-display); font-size: 14px; font-weight: 700;
+      letter-spacing: 0.02em; padding: 12px 24px; border-radius: 10px 10px 0 0;
+      background: transparent; color: var(--text-muted); cursor: pointer;
+      border: 1px solid transparent; border-bottom: none;
+      transition: all 0.2s ease; position: relative; bottom: -1px;
+    }
+    .changelog-tab:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+    .changelog-tab.active {
+      color: var(--accent); background: var(--bg-card);
+      border-color: var(--border);
+    }
+    .changelog-tab s {
+      text-decoration: line-through; text-decoration-color: var(--accent);
+      text-decoration-thickness: 2px;
+    }
+    .changelog-panel { display: none; }
+    .changelog-panel.active { display: block; }
+
+    .changelog-version {
       background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 28px;
-      transition: all 0.3s var(--ease); display: flex; flex-direction: column;
+      border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+      transition: border-color 0.2s ease;
     }
-    .blog-card:hover {
-      border-color: var(--border-hover); background: var(--bg-card-hover);
-      transform: translateY(-3px);
+    .changelog-version:hover { border-color: var(--border-hover); }
+    .changelog-version-header {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px; cursor: pointer; background: none; color: var(--text);
+      font-family: var(--font-display); font-size: 17px; font-weight: 700;
+      letter-spacing: -0.01em; border: none; text-align: left;
+      transition: background 0.2s ease;
     }
-    .blog-date { font-size: 12px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.04em; margin-bottom: 14px; }
-    .blog-card h3 {
-      font-family: var(--font-display); font-size: 19px; font-weight: 700;
-      letter-spacing: -0.01em; margin-bottom: 10px; line-height: 1.3;
+    .changelog-version-header:hover { background: rgba(255,255,255,0.02); }
+    .changelog-version-header .v-badge {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+      background: var(--tag-bg); border: 1px solid var(--tag-border);
+      color: var(--accent); flex-shrink: 0;
     }
-    .blog-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; flex: 1; }
-    .blog-read-more {
-      margin-top: 18px; font-size: 13px; font-weight: 600; color: var(--accent);
-      display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s var(--ease);
+    .changelog-version-header .v-badge.latest {
+      background: rgba(80, 200, 120, 0.08); border-color: rgba(80, 200, 120, 0.2);
+      color: #50c878;
     }
-    .blog-read-more:hover { gap: 10px; }
+    .changelog-chevron {
+      width: 18px; height: 18px; flex-shrink: 0; color: var(--text-dim);
+      transition: transform 0.3s var(--ease);
+    }
+    .changelog-version.open .changelog-chevron { transform: rotate(180deg); }
+    .changelog-version-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s var(--ease);
+    }
+    .changelog-version.open .changelog-version-body { max-height: 3000px; }
+    .changelog-content {
+      padding: 0 24px 20px; border-top: 1px solid var(--border);
+    }
+    .changelog-content ul {
+      list-style: none; padding: 0; margin: 16px 0 0;
+    }
+    .changelog-content li {
+      font-size: 14px; color: var(--text-muted); line-height: 1.7;
+      padding: 4px 0 4px 20px; position: relative;
+    }
+    .changelog-content li::before {
+      content: ''; position: absolute; left: 0; top: 12px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); opacity: 0.5;
+    }
+    .changelog-content li.sub-item {
+      padding-left: 40px; font-size: 13px; color: var(--text-dim);
+    }
+    .changelog-content li.sub-item::before {
+      left: 22px; width: 4px; height: 4px; background: var(--text-dim); opacity: 0.4;
+    }
 
     /* ═══════════════ CONTACT ═══════════════ */
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
@@ -392,7 +449,7 @@
       .nav-toggle { display: block; }
       .games-grid { grid-template-columns: 1fr; }
       .about-grid { grid-template-columns: 1fr; }
-      .blog-grid { grid-template-columns: 1fr; }
+      .changelog-tabs { overflow-x: auto; }
       .contact-layout { grid-template-columns: 1fr; }
       .stats-row { grid-template-columns: repeat(3, 1fr); }
       .gallery-btn { opacity: 1; pointer-events: auto; }
@@ -432,7 +489,7 @@
       <nav class="site-nav" id="site-nav">
         <a href="#games">Games</a>
         <a href="#about">About</a>
-        <a href="#blog">Blog</a>
+        <a href="#changelog">Changelog</a>
         <a href="#contact">Contact</a>
       </nav>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -628,43 +685,537 @@
 
     <hr class="divider" />
 
-    <!-- ═══════════ BLOG ═══════════ -->
-    <section class="section" id="blog">
+    <!-- ═══════════ CHANGELOG ═══════════ -->
+    <section class="section" id="changelog">
       <div class="container">
         <div class="section-header reveal">
-          <div class="section-label">Dev Blog</div>
-          <h2 class="section-title">Latest Updates</h2>
-          <p class="section-desc">Development logs, announcements, and behind-the-scenes insights.</p>
+          <div class="section-label">Changelog</div>
+          <h2 class="section-title">Update History</h2>
+          <p class="section-desc">Every feature, fix, and addition across all versions.</p>
         </div>
-        <div class="blog-grid">
-          <article class="blog-card reveal reveal-delay-1">
-            <div class="blog-date">Feb 5, 2026</div>
-            <h3>New Build Released — v0.8</h3>
-            <p>Major content update with two new story chapters, remastered character art, and a completely overhauled UI system.</p>
-            <a href="#" class="blog-read-more">
-              Read more
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            </a>
-          </article>
-          <article class="blog-card reveal reveal-delay-2">
-            <div class="blog-date">Jan 20, 2026</div>
-            <h3>Behind the Scenes: Character Design</h3>
-            <p>A deep dive into how I design characters — from initial concept sketches to final in-game art and personality writing.</p>
-            <a href="#" class="blog-read-more">
-              Read more
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            </a>
-          </article>
-          <article class="blog-card reveal reveal-delay-3">
-            <div class="blog-date">Jan 2, 2026</div>
-            <h3>2026 Roadmap & What's Next</h3>
-            <p>My plans for the year ahead: new projects in the pipeline, engine experiments, and community goals.</p>
-            <a href="#" class="blog-read-more">
-              Read more
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            </a>
-          </article>
+
+        <div class="changelog-tabs reveal reveal-delay-1">
+          <button class="changelog-tab active" data-tab="ba">Back Again — Rework</button>
+          <button class="changelog-tab" data-tab="bbm">Best <s>Bad</s> Mom</button>
         </div>
+
+        <!-- ══════ BACK AGAIN REWORK ══════ -->
+        <div class="changelog-panel active" id="panel-ba">
+
+          <div class="changelog-version open reveal reveal-delay-2">
+            <button class="changelog-version-header">
+              <span>v0.12 <span class="v-badge latest">Latest</span></span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added CJ Miles &amp; Miss Lexa to brothel specials</li>
+                <li>Added random MILF event to Beach, Downtown, Park, Football Field</li>
+                <li>Added message to all videos: Press 'H' to hide interface</li>
+                <li>Added Classic outfit from the previous game to Rich</li>
+                <li>Added feature: when NPC has max arousal, first interaction leads to sex</li>
+                <li class="sub-item">Kendra, Nicolette, Alexis, Mia</li>
+                <li>Added feature: when NPC reaches max arousal, they send a sex message</li>
+                <li>Major bug fixes regarding Kendra messenger</li>
+                <li>Added feature: request hot-nude pictures from Kendra (requires Chores VI)</li>
+                <li>Added minigame: A MILF's car broke down at the side of the road</li>
+                <li>Added pulse effect to map events</li>
+                <li>Minor bugfixes on yacht</li>
+                <li>Added Nicolette messenger with send/receive messages</li>
+                <li>Removed daily -1 arousal; now NPCs randomly get +1 or -1 arousal</li>
+                <li>Added mute/buzz/sound option to phone</li>
+                <li>Added wanted level (max: 10) — future update with police and car expansions</li>
+                <li>Added randomized text during sex</li>
+                <li>Fixed panty sniffing bug — both now give +1 arousal</li>
+                <li>Item changes: Porn Magazine +1 arousal, Sleeping Pills -1 energy</li>
+                <li>Added Survey &amp; Feedback button to Menu and Settings</li>
+                <li>Added custom intro to the game</li>
+                <li>Added 5 new quests to Mia</li>
+                <li>Added 5 different sex scenes to Mia</li>
+                <li class="sub-item">2 in bedroom, 1 in alley, 1 in mall, 1 in school</li>
+                <li>Added tons of new videos and pictures</li>
+                <li>Added new map element: other side of Uptown</li>
+                <li class="sub-item">Hospital — Lacey Jayne (nurse)</li>
+                <li class="sub-item">Police station — Moriah Mills (officer)</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.11</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added Mia messenger</li>
+                <li>Added 12 nude pictures to Mia messenger</li>
+                <li>Added Christmas event timer to 24th</li>
+                <li>Added special sex event to Kendra, Mia, Alexis</li>
+                <li>Added Discord authentication to the game</li>
+                <li>Added multilayer anticheat to the game</li>
+                <li>Added Christmas decorations shown on 24th</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.10</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Small bug fixes: removed Kendra money begging, fixed 'Arusal' misspell, fixed gym video</li>
+                <li>Discount mechanics added to the Brothel</li>
+                <li>Newspaper extended to show discounts and daily events</li>
+                <li>Tons of new brothel videos</li>
+                <li>Map visual updated — future places: church, ferris wheel &amp; pier, summer festival</li>
+                <li>Added Help menu in gallery for Wallpaper Flashdrives</li>
+                <li>Added Replay Scenes menu to the phone</li>
+                <li>Updated Ava's office visuals</li>
+                <li>Added Church with Arabelle Raphael as Nun</li>
+                <li>Changed clock SFX and minor audio changes</li>
+                <li>Arousal decrease changed: now only -1 instead of -2 per day</li>
+                <li>Added 6 new quests to Ava</li>
+                <li>Added NTR sex scene in Ava's office via spy cam</li>
+                <li>Added Ava to the Bar gloryhole</li>
+                <li>Added Instagram for daily thirst traps (Kendra, Mia, Lisa, Nicole, Nicolette, Alexis)</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.9</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added 5 new quests to Nicolette</li>
+                <li>Removed 'Drink Offer' from Nicolette's Office</li>
+                <li>New map element: Sex Facility at school basement (Patreon only)</li>
+                <li>Sex scene added to Nicolette</li>
+                <li>Item added: Keycard to basement</li>
+                <li>Added 3 different threesome scenes in school basement with Nicolette</li>
+                <li>Buffed taxi tip from $5 to $8</li>
+                <li>Tons of new videos, 30+ added to taxi work</li>
+                <li>Added 5 new quests to Ava</li>
+                <li>Added 1 new wallpaper to Ava's office</li>
+                <li>Added Ava Addams as full character — no longer WIP</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.8</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added 6 new quests to Mia</li>
+                <li>Added blowjobs in the house to Mia</li>
+                <li>Added blowjob from Mia in the Alley without disguise</li>
+                <li>Added 5 new quests to Lisa</li>
+                <li>Added Lisa scenes to school gloryhole</li>
+                <li>Mia location changes: no exclusive gloryhole location, random when at school</li>
+                <li>Added easter egg with Lisa in gloryhole</li>
+                <li>Minor bug fixes</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.7</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added garage to MC's home</li>
+                <li>Fixed Kendra money begging — now once a day with 10% chance</li>
+                <li>Added 7 new quests to Kendra</li>
+                <li>Added 4 different sex scenes to Kendra</li>
+                <li>Added NTR &amp; skip option to Mia NTR quests</li>
+                <li>Added 5 new quests to Mia</li>
+                <li>Added 1 blowjob option to Mia in the Alley</li>
+                <li>Added gloryhole to the school</li>
+                <li>Added 1 new wallpaper to Phone (restaurant)</li>
+                <li>Added gloryhole event with Mia at school</li>
+                <li>Luck skill now easier to obtain</li>
+                <li>Minor bugfixes</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.6</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added automatic outfit change for required outfits</li>
+                <li>Added 9 new NPC characters (future main characters)</li>
+                <li class="sub-item">Moriah Mills, Savannah Bond, Autumn Falls, Lena Paul, Angela White, Brandi Love, Ava Addams, Jasmine Jae, Eva Notty</li>
+                <li>Fixed taxi work button disappearing after load</li>
+                <li>Fixed spy cameras disappearing after load</li>
+                <li>Added option to kick father from the house</li>
+                <li>Added 7 new messenger nudes to Kendra</li>
+                <li>Added 16 blowjob videos to Kendra</li>
+                <li>Added 6 new quests to Kendra</li>
+                <li>Added morning blowjobs to Kendra</li>
+                <li>Added ad-hoc money requests from Kendra with blowjob bribe option</li>
+                <li>Major bugfixes</li>
+                <li>Added new room: attic for future guests</li>
+                <li>Added lingerie outfit for Kendra (bedroom, early morning &amp; midnight)</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.5</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Completely implemented Android version</li>
+                <li>Added outfit system to MC</li>
+                <li>Added closing times to Mall and Office</li>
+                <li>Added outfit requirements at Club, School, Office, Gym</li>
+                <li>Added 12 new quests &amp; new pictures to Kendra</li>
+                <li>Added new character outfits to Kendra (club/dress skins)</li>
+                <li>Implemented new Database for characters and skins</li>
+                <li>Added new wallpaper, items (Kendra &amp; Mia panties), locations (Open Office, Dad's Office, Elevator)</li>
+                <li>Added setting to change character name and relation in phone</li>
+                <li>Added viewable Changelog to the phone</li>
+                <li>Added Mia to school (morning &amp; noon), NPC father, school toilet &amp; gloryhole SFX</li>
+                <li>Added room search for Mia and Kendra rooms (money &amp; panties)</li>
+                <li>Added new location: cinema &amp; Tyler from Best Mom cameo</li>
+                <li>Added 6 new quests to Mia</li>
+                <li>Added auto-disable for Hide/Show Characters function</li>
+                <li>Minor gameplay changes &amp; quest description improvements</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.4</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added feature: increase character arousal (+2) during small talk (once daily)</li>
+                <li>Gloryhole added to the bar with easter egg</li>
+                <li>Dance added to nightclub — pick up girls and go to toilet</li>
+                <li>Personal Trainer work added with extra sex scenes (train Kendra, Nicole, Nicolette, Lisa, Alexis)</li>
+                <li>Added 10 new quests to Nicolette</li>
+                <li>Added new school locations and NPC Janitor</li>
+                <li>Added items: Key to school, Beer at grocery shop</li>
+                <li>Added feature to sneak into school at night</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.3</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added location markers at the park</li>
+                <li>Added soccer moms as random event</li>
+                <li>Fixed taxi work locking characters, item return bug, hall of fame bug</li>
+                <li>Added brazil parade as monthly event with 5 sex scenes in 2 scenarios</li>
+                <li>Added sleeping pills for dad, newspaper for monthly events</li>
+                <li>Added teleport to bedroom button</li>
+                <li>Added yacht as monthly event with 4 girls and 4 new sex scenes</li>
+                <li>Added 8 new quests to Kendra, kiss &amp; ass slap</li>
+                <li>Added Cockdown vial to drug dealer (instant arousal reset)</li>
+                <li>Fixed phone time forward</li>
+                <li>Added spy cams to Lisa's apartment, 3 quests to Lisa</li>
+                <li>Minigame added to all sneaking events</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.2</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added random events: Kendra wake-up, neighbor sex, caught masturbating</li>
+                <li>Added porn videos for masturbating, bus encounter changed to 25%</li>
+                <li>Added sex event &amp; tips to taxi work</li>
+                <li>Added messenger function to all characters</li>
+                <li>Added Jake as interactable NPC, drug dealer as vendor, weed as item</li>
+                <li>Made all scenes with Alexis in her house, Jake sidequest unlocks sex</li>
+                <li>Added 4 repeatable sex scenes &amp; 5 new quests to Alexis</li>
+                <li>Fixed save progression reset issue</li>
+                <li>Changed father arousal mechanics</li>
+                <li>Added sidequest for Kendra (groceries), NTR skill, 4 new quests to Kendra</li>
+                <li>Added house key mechanic for bathrooms, 4 new quests to Lisa</li>
+                <li>Added shower at house, Kendra peep chance</li>
+                <li>Added Instagram, office skin for Lisa, patreon/subscribestar/discord to phone</li>
+                <li>Fixed arousal bugs, closing times, nightclub schedule, navigation bugs</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.1</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Initial Release</li>
+              </ul></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══════ BEST BAD MOM ══════ -->
+        <div class="changelog-panel" id="panel-bbm">
+
+          <div class="changelog-version open reveal">
+            <button class="changelog-version-header">
+              <span>v0.11 <span class="v-badge latest">Latest</span></span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Complete structure overhaul</li>
+                <li>Changed map visuals</li>
+                <li>Changed phone visuals</li>
+                <li>Added new phone wallpapers</li>
+                <li>Old mechanics reworked and upgraded</li>
+                <li>Upgraded menu</li>
+                <li>Added animated hover to contacts</li>
+                <li>More arcade-ish feeling</li>
+                <li>Much simpler city and shops</li>
+                <li>New character cosmetics</li>
+                <li>Complete removal of unnecessary statistics:</li>
+                <li class="sub-item">Corruption, Cooldowns</li>
+                <li>Removed unnecessary items:</li>
+                <li class="sub-item">Camera &amp; Camera Glasses — you can now freely watch kids' POV</li>
+                <li>Removed access to Victoria's house</li>
+                <li class="sub-item">Victoria will now come over to visit instead</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.10</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added school crossover from Back Again</li>
+                <li>Added new workplaces: school office and classroom</li>
+                <li>Added sex scene in classroom with the boys</li>
+                <li>Added blowjob scene in the office with the boys</li>
+                <li>Added Rich, Nicolette, Lisa cameo from Back Again</li>
+                <li>Added Mall with window shopping ($100, -5 stress)</li>
+                <li>Changed gameplay: working adds +1 stress to MC</li>
+                <li>Changed the electric shop in the mall</li>
+                <li>Added 7 new quests for MC</li>
+                <li>Updated visuals for Tyler, Ed, Jasper</li>
+                <li>Minor bug fixes</li>
+                <li>Android port added</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.9</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added Beach, Pub (workplace), Gloryhole (pub)</li>
+                <li>Added Cherie DeVille as new character</li>
+                <li>Added Aubrey Black as new character (Tanya)</li>
+                <li>Added 5 new quests each to Jasper &amp; Ed</li>
+                <li>New graphical improvements</li>
+                <li>Added neighborhood and gym</li>
+                <li>Added new videos to Jasper &amp; Ed cam glass</li>
+                <li>Added Cherie DeVille to messenger and as masseur</li>
+                <li>Minor bug fixes</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.8</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Victoria's house added</li>
+                <li>Spycam system added</li>
+                <li>12 new missions added</li>
+                <li>City added with electronics shop</li>
+                <li>Office/work reworked with random events</li>
+                <li>Ava's arousal extended from 15 to 17</li>
+                <li>Corruption increased from 5 to 6</li>
+                <li>Added Victoria to the map (WIP)</li>
+                <li>Added spy camera content</li>
+                <li>Added Victoria messenger (3 types of nudes)</li>
+                <li>Added 7 types of pornography to TV (midnight, 5x/day arousal)</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.7</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>238 new videos added</li>
+                <li>10+ replayable sex scenes added</li>
+                <li>New missions: 9 Tyler, 6 Ed, 4 Jasper, 6 Bella</li>
+                <li>Fully randomized sex scenes between Bella and the boys</li>
+                <li>Aphrodisiac added (+3 arousal to kids, +1 to MC)</li>
+                <li>Major bugs fixed, early game messages/nudes fixed</li>
+                <li>Fully randomized Bella &amp; Ava lesbian event</li>
+                <li>New income: OnlyFans with Jasper</li>
+                <li>Some sex scene requirements nerfed</li>
+                <li>80 new pictures, new video mechanics</li>
+                <li>Random masturbation scenes for Bella &amp; Boys</li>
+                <li>Ava &amp; Bella &amp; Xander threesome added</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.6</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Added 4 quests to Bella, new character: Bella's boyfriend</li>
+                <li>2 sex scenes: Ed &amp; Xander</li>
+                <li>Cooldown system implemented for some quests</li>
+                <li>Messenger system with random scenarios and tons of pictures</li>
+                <li>Background rework: Ed random appearances, Bella night kitchen visits</li>
+                <li>Holiday decorations removed</li>
+                <li>Chore automation for Bella (corruption cap: level 4)</li>
+                <li>Skip first week option, auto-complete free time</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.5</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>60 new pictures, 101 new videos</li>
+                <li>Added shower sex for each boy (unique scenes)</li>
+                <li>New sex locations: Tyler (garden), Ed (living room), Jasper (kitchen)</li>
+                <li>Corruption optimized to level 5</li>
+                <li>New quests for each boy unlocking new locations</li>
+                <li>Sun tanning scene extended with Tyler sunscreen</li>
+                <li>Added videos to peep after neighbor</li>
+                <li>Unlockable &amp; repeatable Christmas sex event</li>
+                <li>Optimized arousal/stress mechanics</li>
+                <li>Nude wear added (+1 arousal to family)</li>
+                <li>Stress level now affects interactions (max 25 blocks interaction)</li>
+                <li>New phone wallpapers, holiday decorations, menu pictures</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.4</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Tons of new pictures and videos</li>
+                <li>New character: Victoria Lobov (neighbour)</li>
+                <li>Many new quests added (except Abella)</li>
+                <li>Repeatable sex added</li>
+                <li>New quest system for Ava (MC)</li>
+                <li>Tons of bugs fixed</li>
+                <li>Daily delivery event (preventable)</li>
+                <li>Neighbour peep added (vice versa)</li>
+                <li>Map expanded, balcony added with flashing</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.3</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Minor bug fixes, time teleport, job assign, spelling</li>
+                <li>Reworked job application mechanic</li>
+                <li>Updated patreon/subscribestar member list</li>
+                <li>Updated pool dialogue, GUI arrows, clothing system</li>
+                <li>Random events: Jasper peeps Bella, bathroom sex, Ed panty sniffing, boys sneaking in at night, favour requests</li>
+                <li>Added door lock feature at night</li>
+                <li>Added blowjobs to the boys</li>
+                <li>New quests: 8 Tyler, 6 Ed, 5 Jasper</li>
+                <li>130 new pictures, 62 new videos</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.2</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Updated GUI: orange '!' markers, character markers, red stress indicators, quick taskbar</li>
+                <li>Fixed naming bugs, character locations, spelling, quest loops, task persistence</li>
+                <li>Auto-teleport to bedroom at late night</li>
+                <li>30 new quests, complete quest/task system rework</li>
+                <li>Corruption/arousal/stress system balanced</li>
+                <li>80+ images, 11 videos added</li>
+                <li>Patreon phone wallpapers, purchasable items optimized</li>
+                <li>Randomized masturbation &amp; sex events</li>
+                <li>Peep, tease, and act systems implemented</li>
+              </ul></div>
+            </div>
+          </div>
+
+          <div class="changelog-version reveal">
+            <button class="changelog-version-header">
+              <span>v0.1</span>
+              <svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="changelog-version-body">
+              <div class="changelog-content"><ul>
+                <li>Initial Release</li>
+              </ul></div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
 
@@ -815,6 +1366,22 @@
       carousel.addEventListener('keydown', e => {
         if (e.key === 'ArrowLeft') { goTo(idx - 1); e.preventDefault(); }
         if (e.key === 'ArrowRight') { goTo(idx + 1); e.preventDefault(); }
+      });
+    });
+
+    // ═══════════ Changelog tabs & accordion ═══════════
+    document.querySelectorAll('.changelog-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.changelog-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.changelog-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.changelog-version-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.closest('.changelog-version').classList.toggle('open');
       });
     });
 
