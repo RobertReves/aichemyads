@@ -1517,7 +1517,6 @@
     // ═══════════════════════════════════════════
     // ═══════════ REVIEW SYSTEM ═══════════
     // ═══════════════════════════════════════════
-    const STORAGE_KEY = 'bbg_reviews';
     const USER_KEY = 'bbg_user_id';
 
     function getUserId() {
@@ -1529,17 +1528,33 @@
       return uid;
     }
 
+    // ═══════════ Firebase Review Functions ═══════════
     async function getReviews() {
-      const snapshot = await db.ref('reviews').once('value');
-      const data = snapshot.val();
-      return data ? Object.values(data) : [];
-    }
-    async function saveReview(review) {
-      await db.ref('reviews/' + review.id).set(review);
+      try {
+        const snapshot = await db.ref('reviews').once('value');
+        const data = snapshot.val();
+        return data ? Object.values(data) : [];
+      } catch (err) {
+        console.error('Firebase read error:', err);
+        return [];
+      }
     }
 
-    async function deleteReview(id) {
-      await db.ref('reviews/' + id).remove();
+    async function saveReview(review) {
+      try {
+        await db.ref('reviews/' + review.id).set(review);
+      } catch (err) {
+        console.error('Firebase write error:', err);
+        throw err;
+      }
+    }
+
+    async function deleteReviewFromDb(id) {
+      try {
+        await db.ref('reviews/' + id).remove();
+      } catch (err) {
+        console.error('Firebase delete error:', err);
+      }
     }
 
     const starSvg = '<svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7.4L12 16.8l-6.3 4.6 2.3-7.4-6-4.6h7.6z"/></svg>';
@@ -1551,8 +1566,8 @@
 
     let selectedIds = new Set();
 
-    function renderReviews() {
-      const reviews = getReviews();
+    async function renderReviews() {
+      const reviews = await getReviews();
       const grid = document.getElementById('reviews-grid');
       const emptyMsg = document.getElementById('reviews-empty');
       const uid = getUserId();
@@ -1622,7 +1637,7 @@
       } else { spotEl.classList.remove('visible'); }
     }
 
-    function submitReview() {
+    async function submitReview() {
       const msgEl = document.getElementById('review-msg');
       const rating = document.querySelector('input[name="rating"]:checked');
       const text = document.getElementById('review-text').value.trim();
@@ -1630,43 +1645,65 @@
       if (!rating) { msgEl.className = 'review-msg error'; msgEl.textContent = 'Please select a star rating.'; return; }
       if (text.length < 3) { msgEl.className = 'review-msg error'; msgEl.textContent = 'Please write at least a few words.'; return; }
       if (text.length > 500) { msgEl.className = 'review-msg error'; msgEl.textContent = 'Review must be under 500 characters.'; return; }
-      let reviews = getReviews();
-      const existingIdx = reviews.findIndex(r => r.uid === uid);
-      const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      if (existingIdx >= 0) {
-        reviews[existingIdx].rating = parseInt(rating.value);
-        reviews[existingIdx].text = text;
-        reviews[existingIdx].date = dateStr;
-        msgEl.className = 'review-msg success'; msgEl.textContent = 'Review updated!';
-      } else {
-        reviews.push({ id: 'r_' + Date.now(), uid: uid, rating: parseInt(rating.value), text: text, date: dateStr });
-        msgEl.className = 'review-msg success'; msgEl.textContent = 'Thanks for your review!';
+
+      try {
+        const reviews = await getReviews();
+        const existing = reviews.find(r => r.uid === uid);
+        const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        if (existing) {
+          // Update existing review
+          existing.rating = parseInt(rating.value);
+          existing.text = text;
+          existing.date = dateStr;
+          await saveReview(existing);
+          msgEl.className = 'review-msg success'; msgEl.textContent = 'Review updated!';
+        } else {
+          // New review
+          const newReview = { id: 'r_' + Date.now(), uid: uid, rating: parseInt(rating.value), text: text, date: dateStr };
+          await saveReview(newReview);
+          msgEl.className = 'review-msg success'; msgEl.textContent = 'Thanks for your review!';
+        }
+        await renderReviews();
+      } catch (err) {
+        msgEl.className = 'review-msg error'; msgEl.textContent = 'Error saving — please try again.';
+        console.error(err);
       }
-      saveReviews(reviews);
-      renderReviews();
       setTimeout(() => { msgEl.textContent = ''; }, 3000);
     }
 
-    function deleteSelected() {
+    async function deleteSelected() {
       if (selectedIds.size === 0) return;
       if (!confirm('Delete ' + selectedIds.size + ' review(s)?')) return;
-      saveReviews(getReviews().filter(r => !selectedIds.has(r.id)));
-      selectedIds.clear();
-      renderReviews();
+      try {
+        for (const id of selectedIds) {
+          await deleteReviewFromDb(id);
+        }
+        selectedIds.clear();
+        await renderReviews();
+      } catch (err) {
+        console.error('Delete error:', err);
+      }
+    }
+
+    // ═══════════ Seed demo reviews (runs once if DB is empty) ═══════════
+    async function seedIfEmpty() {
+      const reviews = await getReviews();
+      if (reviews.length === 0) {
+        const seeds = [
+          { id: 'demo_1', uid: 'seed_1', rating: 5, text: 'Back Again is insane — the open world is huge and there is always something new to discover. Easily the best adult sandbox I have played.', date: 'Jan 15, 2026' },
+          { id: 'demo_2', uid: 'seed_2', rating: 4, text: 'Best Mom is such a unique concept. The arcade gameplay mixed with the story really works. Excited to see where it goes.', date: 'Jan 28, 2026' },
+          { id: 'demo_3', uid: 'seed_3', rating: 5, text: 'The amount of content in these games is crazy for an indie dev. Updates are frequent and always packed with new stuff.', date: 'Feb 3, 2026' },
+          { id: 'demo_4', uid: 'seed_4', rating: 4, text: 'Really solid games. The Ren\'Py engine is pushed to its limits here. Looking forward to more crossover content between the two games.', date: 'Feb 6, 2026' },
+          { id: 'demo_5', uid: 'seed_5', rating: 5, text: 'Joined the Discord and the community is great. Dev actually listens to feedback. Both games keep getting better with every update.', date: 'Feb 7, 2026' },
+        ];
+        for (const r of seeds) { await saveReview(r); }
+      }
     }
 
     // ═══════════ Init ═══════════
-    if (getReviews().length === 0) {
-      saveReviews([
-        { id: 'demo_1', uid: 'seed_1', rating: 5, text: 'Back Again is insane — the open world is huge and there is always something new to discover. Easily the best adult sandbox I have played.', date: 'Jan 15, 2026' },
-        { id: 'demo_2', uid: 'seed_2', rating: 4, text: 'Best Mom is such a unique concept. The arcade gameplay mixed with the story really works. Excited to see where it goes.', date: 'Jan 28, 2026' },
-        { id: 'demo_3', uid: 'seed_3', rating: 5, text: 'The amount of content in these games is crazy for an indie dev. Updates are frequent and always packed with new stuff.', date: 'Feb 3, 2026' },
-        { id: 'demo_4', uid: 'seed_4', rating: 4, text: 'Really solid games. The Ren\'Py engine is pushed to its limits here. Looking forward to more crossover content between the two games.', date: 'Feb 6, 2026' },
-        { id: 'demo_5', uid: 'seed_5', rating: 5, text: 'Joined the Discord and the community is great. Dev actually listens to feedback. Both games keep getting better with every update.', date: 'Feb 7, 2026' },
-      ]);
-    }
     renderChangelogs();
-    renderReviews();
+    seedIfEmpty().then(() => renderReviews());
   </script>
 </body>
 </html>
