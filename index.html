@@ -793,7 +793,7 @@
     /* ═══════════════ PATRON TICKER ═══════════════ */
     .patron-ticker {
       position: fixed; top: 72px; left: 0; right: 0; z-index: 999;
-      height: 36px; overflow: hidden;
+      height: 38px; overflow: hidden;
       background: var(--bg-elevated);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center;
@@ -808,26 +808,39 @@
     }
     .patron-ticker-label svg { width: 13px; height: 13px; fill: var(--accent); flex-shrink: 0; }
     .patron-ticker-track {
-      display: flex; animation: tickerScroll var(--ticker-duration, 90s) linear infinite;
+      display: flex; animation: tickerScroll var(--ticker-duration, 120s) linear infinite;
       padding-left: 140px;
     }
     .patron-ticker:hover .patron-ticker-track { animation-play-state: paused; }
     .patron-ticker-track span {
-      white-space: nowrap; padding: 0 20px; font-size: 12px;
-      font-weight: 500; color: var(--text-dim); letter-spacing: 0.01em;
+      white-space: nowrap; padding: 0 18px; font-size: 12px;
+      font-weight: 600; color: var(--text-muted); letter-spacing: 0.01em;
       display: inline-flex; align-items: center; gap: 6px;
       transition: color 0.2s ease;
     }
-    .patron-ticker-track span:hover { color: var(--text); }
+    .patron-ticker-track span:hover { color: #fff; }
     .patron-ticker-track .tier-badge {
       font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
       text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
       line-height: 1.2; flex-shrink: 0;
     }
-    .tier-ultimate { background: rgba(255, 185, 15, 0.15); color: #ffb90f; border: 1px solid rgba(255, 185, 15, 0.3); }
-    .tier-support { background: rgba(120, 180, 255, 0.1); color: #78b4ff; border: 1px solid rgba(120, 180, 255, 0.25); }
-    .tier-patron { background: rgba(180, 130, 255, 0.1); color: #b482ff; border: 1px solid rgba(180, 130, 255, 0.25); }
-    .tier-tipper { background: rgba(100, 220, 170, 0.1); color: #64dcaa; border: 1px solid rgba(100, 220, 170, 0.25); }
+    /* Ultimate — gold */
+    .tier-ultimate { background: rgba(255, 200, 40, 0.2); color: #ffc828; border: 1px solid rgba(255, 200, 40, 0.45); }
+    .patron-ticker-track span.name-ultimate { color: #ffc828; }
+    .patron-ticker-track span.name-ultimate:hover { color: #ffe07a; }
+    /* Support — vivid pink */
+    .tier-support { background: rgba(255, 60, 130, 0.18); color: #ff3c82; border: 1px solid rgba(255, 60, 130, 0.4); }
+    .patron-ticker-track span.name-support { color: #ff6ea0; }
+    .patron-ticker-track span.name-support:hover { color: #ff9ec0; }
+    /* Patron — vivid blue */
+    .tier-patron { background: rgba(50, 140, 255, 0.18); color: #328cff; border: 1px solid rgba(50, 140, 255, 0.4); }
+    .patron-ticker-track span.name-patron { color: #5ea8ff; }
+    .patron-ticker-track span.name-patron:hover { color: #96c8ff; }
+    /* Tipper — white on dark */
+    .tier-tipper { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid rgba(255, 255, 255, 0.15); }
+    .patron-ticker-track span.name-tipper { color: var(--text-muted); }
+    .patron-ticker-track span.name-tipper:hover { color: #fff; }
+
     @keyframes tickerScroll {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -839,7 +852,7 @@
     }
     .patron-ticker-fade-l { left: 130px; background: linear-gradient(to right, var(--bg-elevated), transparent); }
     .patron-ticker-fade-r { right: 0; background: linear-gradient(to left, var(--bg-elevated), transparent); }
-    .hero { padding-top: 36px; }
+    .hero { padding-top: 38px; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -1321,42 +1334,39 @@
     const CL_VISIBLE = 3;
 
     // ═══════════════════════════════════════════════════════
-    // Game definitions — file paths to your .md changelogs
-    // Just update the .md files on your server, nothing else!
+    // Game definitions — just update the .md files, nothing else!
     // ═══════════════════════════════════════════════════════
     const CL_GAMES = [
       { id: 'ba', name: 'Back Again — Rework', nameHtml: 'Back Again — Rework', file: 'change_log_ba.md' },
       { id: 'bbm', name: 'Best Bad Mom', nameHtml: 'Best <s>Bad</s> Mom', file: 'change_log_bbm.md' }
     ];
 
-    // In-memory changelog store (populated from .md files)
     let changelogData = { ba: [], bbm: [] };
-
     function getChangelogs() { return changelogData; }
 
-    // ═══════════ Markdown Parser ═══════════
+    // ═══════════ Markdown Parser (handles both formats) ═══════════
+    // "ChangeLog 0.14:" or "Changelog 0.14:" or "v0.12" or "v0.12:"
     function parseChangelogMd(text) {
       const versions = [];
       let current = null;
-      const lines = text.split('\n');
-      for (const line of lines) {
-        // Match "ChangeLog 0.14:" or "Changelog 0.14:" (case-insensitive)
-        const verMatch = line.match(/^[Cc]hange\s*[Ll]og\s+([\d.]+)\s*:/);
+      for (const line of text.split('\n')) {
+        const verMatch = line.match(/^(?:[Cc]hange\s*[Ll]og\s+)?(v?)([\d.]+)\s*:?\s*$/);
         if (verMatch) {
           if (current) versions.push(current);
-          current = { id: 'v' + verMatch[1].replace(/\./g, '_'), ver: 'v' + verMatch[1], items: [] };
+          const vNum = verMatch[2];
+          current = { id: 'v' + vNum.replace(/\./g, '_'), ver: 'v' + vNum, items: [] };
           continue;
         }
         if (!current) continue;
         // Sub-item: 3+ spaces or tab, then - or +
         if (/^(\s{3,}|\t)\s*[-+]/.test(line)) {
-          const txt = line.replace(/^\s+[-+]\s*/, '');
-          if (txt.trim()) current.items.push('  ' + txt.trim());
+          const txt = line.replace(/^\s+[-+]\s*/, '').trim();
+          if (txt) current.items.push('  ' + txt);
         }
-        // Main item: " - " at start
-        else if (/^\s{0,2}-\s/.test(line)) {
-          const txt = line.replace(/^\s*-\s*/, '');
-          if (txt.trim()) current.items.push(txt.trim());
+        // Main item: " - " or " + " at start (1-2 spaces)
+        else if (/^\s{0,2}[-+]\s/.test(line)) {
+          const txt = line.replace(/^\s*[-+]\s*/, '').trim();
+          if (txt) current.items.push(txt);
         }
       }
       if (current) versions.push(current);
@@ -1370,9 +1380,7 @@
           if (!res.ok) { console.warn('Could not load ' + game.file); continue; }
           const text = await res.text();
           changelogData[game.id] = parseChangelogMd(text);
-        } catch (err) {
-          console.warn('Failed to fetch ' + game.file + ':', err);
-        }
+        } catch (err) { console.warn('Failed to fetch ' + game.file, err); }
       }
     }
 
@@ -1380,23 +1388,11 @@
     function parsePatronsMd(text) {
       const tiers = {};
       let currentTier = null;
-      const tierMap = {
-        'ULTIMATE': 'ultimate',
-        'SUPPORT': 'support',
-        'PATRON': 'patron',
-        'TIPPER': 'tipper'
-      };
+      const tierMap = { 'ULTIMATE':'ultimate','SUPPORT':'support','PATRON':'patron','TIPPER':'tipper' };
       for (const line of text.split('\n')) {
-        // Match tier headers like "--- U L T I M A T E ---"
-        const tierMatch = line.match(/---\s*([A-Z\s]+?)\s*---/);
-        if (tierMatch) {
-          const raw = tierMatch[1].replace(/\s+/g, '');
-          currentTier = tierMap[raw] || raw.toLowerCase();
-          if (!tiers[currentTier]) tiers[currentTier] = [];
-          continue;
-        }
+        const m = line.match(/---\s*([A-Z\s]+?)\s*---/);
+        if (m) { const raw = m[1].replace(/\s+/g, ''); currentTier = tierMap[raw] || raw.toLowerCase(); if (!tiers[currentTier]) tiers[currentTier] = []; continue; }
         if (!currentTier) continue;
-        // Parse comma-separated names
         const names = line.split(',').map(n => n.trim()).filter(n => n.length > 0);
         tiers[currentTier].push(...names);
       }
@@ -1407,12 +1403,8 @@
       try {
         const res = await fetch('patrons.md?t=' + Date.now());
         if (!res.ok) return {};
-        const text = await res.text();
-        return parsePatronsMd(text);
-      } catch (err) {
-        console.warn('Failed to fetch patrons.md:', err);
-        return {};
-      }
+        return parsePatronsMd(await res.text());
+      } catch (err) { console.warn('Failed to fetch patrons.md', err); return {}; }
     }
 
     // ═══════════ Render Changelogs ═══════════
@@ -1606,7 +1598,7 @@
         });
       }
 
-      // Modified in-memory — to persist, update the .md file on your server
+      // Modified in-memory — update the .md file on your server to persist
       clModalClose();
       activeTab = game;
       renderChangelogs();
@@ -1814,37 +1806,30 @@
       const track = document.getElementById('patron-track');
       if (!track || Object.keys(patrons).length === 0) return;
       const tierMap = {
-        ultimate: { label: 'Ultimate', cls: 'tier-ultimate' },
-        support:  { label: 'Support',  cls: 'tier-support' },
-        patron:   { label: 'Patron',   cls: 'tier-patron' },
-        tipper:   { label: 'Tipper',   cls: 'tier-tipper' }
+        ultimate: { label: 'Ultimate', cls: 'tier-ultimate', nameCls: 'name-ultimate' },
+        support:  { label: 'Support',  cls: 'tier-support',  nameCls: 'name-support' },
+        patron:   { label: 'Patron',   cls: 'tier-patron',   nameCls: 'name-patron' },
+        tipper:   { label: 'Tipper',   cls: 'tier-tipper',   nameCls: 'name-tipper' }
       };
       let html = '';
       for (const [tier, names] of Object.entries(patrons)) {
-        const t = tierMap[tier] || { label: tier, cls: '' };
+        const t = tierMap[tier] || { label: tier, cls: '', nameCls: '' };
         names.forEach(name => {
-          html += '<span><span class="tier-badge ' + t.cls + '">' + t.label + '</span>' + escapeHtml(name) + '</span>';
+          html += '<span class="' + t.nameCls + '"><span class="tier-badge ' + t.cls + '">' + t.label + '</span>' + escapeHtml(name) + '</span>';
         });
       }
-      // Duplicate for seamless infinite scroll
       track.innerHTML = html + html;
-      const totalNames = Object.values(patrons).flat().length;
-      const duration = Math.max(60, totalNames * 0.7);
-      track.style.setProperty('--ticker-duration', duration + 's');
-      track.parentElement.style.setProperty('--ticker-duration', duration + 's');
+      const total = Object.values(patrons).flat().length;
+      const dur = Math.max(80, total * 1.1);
+      track.parentElement.style.setProperty('--ticker-duration', dur + 's');
     }
 
     // ═══════════ Init ═══════════
     (async () => {
-      // Fetch changelogs from .md files, then render
       await fetchChangelogs();
       renderChangelogs();
-
-      // Fetch patrons from .md file, then render ticker
       const patrons = await fetchPatrons();
       renderPatronTicker(patrons);
-
-      // Reviews (Firebase)
       await seedIfEmpty();
       await renderReviews();
     })();
