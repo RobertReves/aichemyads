@@ -1036,7 +1036,7 @@
               <p>A sprawling open-world experience packed with locations, characters, and endless possibilities. You play as a young man given a miraculous second chance — sent back to relive his youth with full knowledge of what's to come. This time, he's determined to seize every opportunity he once let slip away. Explore an entire city, build relationships on your own terms, and carve out the life you always wanted across a massive sandbox world.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="https://gofile.io/d/m8GFtA" target="_blank" class="game-link">
+                <a href="#" data-download="Back Again" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1081,7 +1081,7 @@
               <p>Step into the life of a resilient single mother who, after the tragic loss of her husband, must raise four children on her own — three energetic boys and a curious girl. Set in an era where societal norms and expectations pose their own challenges, the game explores a mother's love, sacrifice, and unwavering commitment to her family through arcade-style sandbox gameplay.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="https://gofile.io/d/sLWy1a" target="_blank" class="game-link">
+                <a href="#" data-download="Best Bad Mom" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1824,8 +1824,33 @@
       track.parentElement.style.setProperty('--ticker-duration', dur + 's');
     }
 
+    // ═══════════ Download Links from Markdown ═══════════
+    async function fetchDownloadLinks() {
+      try {
+        const res = await fetch('download.md?t=' + Date.now());
+        if (!res.ok) return;
+        const text = await res.text();
+        const links = {};
+        for (const line of text.split('\n')) {
+          const match = line.match(/^(.+?):\s*(https?:\/\/\S+)/);
+          if (match) {
+            links[match[1].trim()] = match[2].trim();
+          }
+        }
+        document.querySelectorAll('a[data-download]').forEach(el => {
+          const key = el.getAttribute('data-download');
+          if (links[key]) {
+            el.href = links[key];
+          }
+        });
+      } catch (err) {
+        console.warn('Failed to fetch download.md', err);
+      }
+    }
+
     // ═══════════ Init ═══════════
     (async () => {
+      await fetchDownloadLinks();
       await fetchChangelogs();
       renderChangelogs();
       const patrons = await fetchPatrons();
