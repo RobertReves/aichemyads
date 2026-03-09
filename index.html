@@ -789,16 +789,67 @@
       background: rgba(220, 50, 50, 0.1); border: 1px solid rgba(220, 50, 50, 0.25);
       color: #e05555;
     }
+
+    /* ═══════════════ PATRON TICKER ═══════════════ */
+    .patron-ticker {
+      position: fixed; top: 72px; left: 0; right: 0; z-index: 999;
+      height: 36px; overflow: hidden;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .patron-ticker-label {
+      position: absolute; left: 0; top: 0; bottom: 0; z-index: 3;
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 16px; background: var(--bg-elevated);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); white-space: nowrap;
+      border-right: 1px solid var(--border);
+    }
+    .patron-ticker-label svg { width: 13px; height: 13px; fill: var(--accent); flex-shrink: 0; }
+    .patron-ticker-track {
+      display: flex; animation: tickerScroll var(--ticker-duration, 90s) linear infinite;
+      padding-left: 140px;
+    }
+    .patron-ticker:hover .patron-ticker-track { animation-play-state: paused; }
+    .patron-ticker-track span {
+      white-space: nowrap; padding: 0 20px; font-size: 12px;
+      font-weight: 500; color: var(--text-dim); letter-spacing: 0.01em;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: color 0.2s ease;
+    }
+    .patron-ticker-track span:hover { color: var(--text); }
+    .patron-ticker-track .tier-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
+      line-height: 1.2; flex-shrink: 0;
+    }
+    .tier-ultimate { background: rgba(255, 185, 15, 0.15); color: #ffb90f; border: 1px solid rgba(255, 185, 15, 0.3); }
+    .tier-support { background: rgba(120, 180, 255, 0.1); color: #78b4ff; border: 1px solid rgba(120, 180, 255, 0.25); }
+    .tier-patron { background: rgba(180, 130, 255, 0.1); color: #b482ff; border: 1px solid rgba(180, 130, 255, 0.25); }
+    .tier-tipper { background: rgba(100, 220, 170, 0.1); color: #64dcaa; border: 1px solid rgba(100, 220, 170, 0.25); }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .patron-ticker-fade-l,
+    .patron-ticker-fade-r {
+      position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2;
+      pointer-events: none;
+    }
+    .patron-ticker-fade-l { left: 130px; background: linear-gradient(to right, var(--bg-elevated), transparent); }
+    .patron-ticker-fade-r { right: 0; background: linear-gradient(to left, var(--bg-elevated), transparent); }
+    .hero { padding-top: 36px; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <script>
     firebase.initializeApp({
       // PASTE YOUR CONFIG HERE
-      apiKey: "AIzaSyDbYjTixuUXMKx9FTBA4ELkS2oiiEf1BdY",
-      authDomain: "bigboygames-reviews.firebaseapp.com",
-      databaseURL: "https://bigboygames-reviews-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "bigboygames-reviews",
+      apiKey: "...",
+      authDomain: "...",
+      databaseURL: "...",
+      projectId: "...",
     });
     window.db = firebase.database();
   </script>
@@ -835,6 +886,17 @@
       </button>
     </div>
   </header>
+
+  <!-- ═══════════ PATRON TICKER ═══════════ -->
+  <div class="patron-ticker" id="patron-ticker">
+    <div class="patron-ticker-label">
+      <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7.4L12 16.8l-6.3 4.6 2.3-7.4-6-4.6h7.6z"/></svg>
+      Supporters
+    </div>
+    <div class="patron-ticker-fade-l"></div>
+    <div class="patron-ticker-track" id="patron-track"></div>
+    <div class="patron-ticker-fade-r"></div>
+  </div>
 
   <main>
     <!-- ═══════════ HERO ═══════════ -->
@@ -961,7 +1023,7 @@
               <p>A sprawling open-world experience packed with locations, characters, and endless possibilities. You play as a young man given a miraculous second chance — sent back to relive his youth with full knowledge of what's to come. This time, he's determined to seize every opportunity he once let slip away. Explore an entire city, build relationships on your own terms, and carve out the life you always wanted across a massive sandbox world.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="https://gofile.io/d/5sfIiX" target="_blank" class="game-link">
+                <a href="https://gofile.io/d/m8GFtA" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1006,7 +1068,7 @@
               <p>Step into the life of a resilient single mother who, after the tragic loss of her husband, must raise four children on her own — three energetic boys and a curious girl. Set in an era where societal norms and expectations pose their own challenges, the game explores a mother's love, sacrifice, and unwavering commitment to her family through arcade-style sandbox gameplay.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="https://gofile.io/d/v30Cxr" target="_blank" class="game-link">
+                <a href="https://gofile.io/d/sLWy1a" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1256,57 +1318,102 @@
     // ═══════════════════════════════════════════════════════
     // ═══════════ CHANGELOG SYSTEM (data-driven) ═══════════
     // ═══════════════════════════════════════════════════════
-    const CL_KEY = 'bbg_changelogs';
     const CL_VISIBLE = 3;
 
-    // Game definitions
+    // ═══════════════════════════════════════════════════════
+    // Game definitions — file paths to your .md changelogs
+    // Just update the .md files on your server, nothing else!
+    // ═══════════════════════════════════════════════════════
     const CL_GAMES = [
-      { id: 'ba', name: 'Back Again — Rework', nameHtml: 'Back Again — Rework' },
-      { id: 'bbm', name: 'Best Bad Mom', nameHtml: 'Best <s>Bad</s> Mom' }
+      { id: 'ba', name: 'Back Again — Rework', nameHtml: 'Back Again — Rework', file: 'change_log_ba.md' },
+      { id: 'bbm', name: 'Best Bad Mom', nameHtml: 'Best <s>Bad</s> Mom', file: 'change_log_bbm.md' }
     ];
 
-    function getChangelogs() {
-      try { return JSON.parse(localStorage.getItem(CL_KEY)); } catch { return null; }
-    }
-    function saveChangelogs(data) {
-      localStorage.setItem(CL_KEY, JSON.stringify(data));
+    // In-memory changelog store (populated from .md files)
+    let changelogData = { ba: [], bbm: [] };
+
+    function getChangelogs() { return changelogData; }
+
+    // ═══════════ Markdown Parser ═══════════
+    function parseChangelogMd(text) {
+      const versions = [];
+      let current = null;
+      const lines = text.split('\n');
+      for (const line of lines) {
+        // Match "ChangeLog 0.14:" or "Changelog 0.14:" (case-insensitive)
+        const verMatch = line.match(/^[Cc]hange\s*[Ll]og\s+([\d.]+)\s*:/);
+        if (verMatch) {
+          if (current) versions.push(current);
+          current = { id: 'v' + verMatch[1].replace(/\./g, '_'), ver: 'v' + verMatch[1], items: [] };
+          continue;
+        }
+        if (!current) continue;
+        // Sub-item: 3+ spaces or tab, then - or +
+        if (/^(\s{3,}|\t)\s*[-+]/.test(line)) {
+          const txt = line.replace(/^\s+[-+]\s*/, '');
+          if (txt.trim()) current.items.push('  ' + txt.trim());
+        }
+        // Main item: " - " at start
+        else if (/^\s{0,2}-\s/.test(line)) {
+          const txt = line.replace(/^\s*-\s*/, '');
+          if (txt.trim()) current.items.push(txt.trim());
+        }
+      }
+      if (current) versions.push(current);
+      return versions;
     }
 
-    // ═══════════ Seed data (loads once, then editable) ═══════════
-    function seedChangelogs() {
-      return {
-        ba: [
-          { id: 'ba_12', ver: 'v0.12', items: ['Added CJ Miles & Miss Lexa to brothel specials','Added random MILF event to Beach, Downtown, Park, Football Field','Added message to all videos: Press \'H\' to hide interface','Added Classic outfit from the previous game to Rich','Added feature: when NPC has max arousal, first interaction leads to sex','  Kendra, Nicolette, Alexis, Mia','Added feature: when NPC reaches max arousal, they send a sex message','Major bug fixes regarding Kendra messenger','Added feature: request hot-nude pictures from Kendra (requires Chores VI)','Added minigame: A MILF\'s car broke down at the side of the road','Added pulse effect to map events','Minor bugfixes on yacht','Added Nicolette messenger with send/receive messages','Removed daily -1 arousal; now NPCs randomly get +1 or -1 arousal','Added mute/buzz/sound option to phone','Added wanted level (max: 10) — future update with police and car expansions','Added randomized text during sex','Fixed panty sniffing bug — both now give +1 arousal','Item changes: Porn Magazine +1 arousal, Sleeping Pills -1 energy','Added Survey & Feedback button to Menu and Settings','Added custom intro to the game','Added 5 new quests to Mia','Added 5 different sex scenes to Mia','  2 in bedroom, 1 in alley, 1 in mall, 1 in school','Added tons of new videos and pictures','Added new map element: other side of Uptown','  Hospital — Lacey Jayne (nurse)','  Police station — Moriah Mills (officer)'] },
-          { id: 'ba_11', ver: 'v0.11', items: ['Added Mia messenger','Added 12 nude pictures to Mia messenger','Added Christmas event timer to 24th','Added special sex event to Kendra, Mia, Alexis','Added Discord authentication to the game','Added multilayer anticheat to the game','Added Christmas decorations shown on 24th'] },
-          { id: 'ba_10', ver: 'v0.10', items: ['Small bug fixes: removed Kendra money begging, fixed \'Arusal\' misspell, fixed gym video','Discount mechanics added to the Brothel','Newspaper extended to show discounts and daily events','Tons of new brothel videos','Map visual updated — future places: church, ferris wheel & pier, summer festival','Added Help menu in gallery for Wallpaper Flashdrives','Added Replay Scenes menu to the phone','Updated Ava\'s office visuals','Added Church with Arabelle Raphael as Nun','Changed clock SFX and minor audio changes','Arousal decrease changed: now only -1 instead of -2 per day','Added 6 new quests to Ava','Added NTR sex scene in Ava\'s office via spy cam','Added Ava to the Bar gloryhole','Added Instagram for daily thirst traps (Kendra, Mia, Lisa, Nicole, Nicolette, Alexis)'] },
-          { id: 'ba_9', ver: 'v0.9', items: ['Added 5 new quests to Nicolette','Removed \'Drink Offer\' from Nicolette\'s Office','New map element: Sex Facility at school basement (Patreon only)','Sex scene added to Nicolette','Item added: Keycard to basement','Added 3 different threesome scenes in school basement with Nicolette','Buffed taxi tip from $5 to $8','Tons of new videos, 30+ added to taxi work','Added 5 new quests to Ava','Added 1 new wallpaper to Ava\'s office','Added Ava Addams as full character — no longer WIP'] },
-          { id: 'ba_8', ver: 'v0.8', items: ['Added 6 new quests to Mia','Added blowjobs in the house to Mia','Added blowjob from Mia in the Alley without disguise','Added 5 new quests to Lisa','Added Lisa scenes to school gloryhole','Mia location changes: no exclusive gloryhole location, random when at school','Added easter egg with Lisa in gloryhole','Minor bug fixes'] },
-          { id: 'ba_7', ver: 'v0.7', items: ['Added garage to MC\'s home','Fixed Kendra money begging — now once a day with 10% chance','Added 7 new quests to Kendra','Added 4 different sex scenes to Kendra','Added NTR & skip option to Mia NTR quests','Added 5 new quests to Mia','Added 1 blowjob option to Mia in the Alley','Added gloryhole to the school','Added 1 new wallpaper to Phone (restaurant)','Added gloryhole event with Mia at school','Luck skill now easier to obtain','Minor bugfixes'] },
-          { id: 'ba_6', ver: 'v0.6', items: ['Added automatic outfit change for required outfits','Added 9 new NPC characters (future main characters)','  Moriah Mills, Savannah Bond, Autumn Falls, Lena Paul, Angela White, Brandi Love, Ava Addams, Jasmine Jae, Eva Notty','Fixed taxi work button disappearing after load','Fixed spy cameras disappearing after load','Added option to kick father from the house','Added 7 new messenger nudes to Kendra','Added 16 blowjob videos to Kendra','Added 6 new quests to Kendra','Added morning blowjobs to Kendra','Added ad-hoc money requests from Kendra with blowjob bribe option','Major bugfixes','Added new room: attic for future guests','Added lingerie outfit for Kendra (bedroom, early morning & midnight)'] },
-          { id: 'ba_5', ver: 'v0.5', items: ['Completely implemented Android version','Added outfit system to MC','Added closing times to Mall and Office','Added outfit requirements at Club, School, Office, Gym','Added 12 new quests & new pictures to Kendra','Added new character outfits to Kendra (club/dress skins)','Implemented new Database for characters and skins','Added new wallpaper, items (Kendra & Mia panties), locations (Open Office, Dad\'s Office, Elevator)','Added setting to change character name and relation in phone','Added viewable Changelog to the phone','Added Mia to school (morning & noon), NPC father, school toilet & gloryhole SFX','Added room search for Mia and Kendra rooms (money & panties)','Added new location: cinema & Tyler from Best Mom cameo','Added 6 new quests to Mia','Added auto-disable for Hide/Show Characters function','Minor gameplay changes & quest description improvements'] },
-          { id: 'ba_4', ver: 'v0.4', items: ['Added feature: increase character arousal (+2) during small talk (once daily)','Gloryhole added to the bar with easter egg','Dance added to nightclub — pick up girls and go to toilet','Personal Trainer work added with extra sex scenes (train Kendra, Nicole, Nicolette, Lisa, Alexis)','Added 10 new quests to Nicolette','Added new school locations and NPC Janitor','Added items: Key to school, Beer at grocery shop','Added feature to sneak into school at night'] },
-          { id: 'ba_3', ver: 'v0.3', items: ['Added location markers at the park','Added soccer moms as random event','Fixed taxi work locking characters, item return bug, hall of fame bug','Added brazil parade as monthly event with 5 sex scenes in 2 scenarios','Added sleeping pills for dad, newspaper for monthly events','Added teleport to bedroom button','Added yacht as monthly event with 4 girls and 4 new sex scenes','Added 8 new quests to Kendra, kiss & ass slap','Added Cockdown vial to drug dealer (instant arousal reset)','Fixed phone time forward','Added spy cams to Lisa\'s apartment, 3 quests to Lisa','Minigame added to all sneaking events'] },
-          { id: 'ba_2', ver: 'v0.2', items: ['Added random events: Kendra wake-up, neighbor sex, caught masturbating','Added porn videos for masturbating, bus encounter changed to 25%','Added sex event & tips to taxi work','Added messenger function to all characters','Added Jake as interactable NPC, drug dealer as vendor, weed as item','Made all scenes with Alexis in her house, Jake sidequest unlocks sex','Added 4 repeatable sex scenes & 5 new quests to Alexis','Fixed save progression reset issue','Changed father arousal mechanics','Added sidequest for Kendra (groceries), NTR skill, 4 new quests to Kendra','Added house key mechanic for bathrooms, 4 new quests to Lisa','Added shower at house, Kendra peep chance','Added Instagram, office skin for Lisa, patreon/subscribestar/discord to phone','Fixed arousal bugs, closing times, nightclub schedule, navigation bugs'] },
-          { id: 'ba_1', ver: 'v0.1', items: ['Initial Release'] }
-        ],
-        bbm: [
-          { id: 'bbm_11', ver: 'v0.11', items: ['Complete structure overhaul','Changed map visuals','Changed phone visuals','Added new phone wallpapers','Old mechanics reworked and upgraded','Upgraded menu','Added animated hover to contacts','More arcade-ish feeling','Much simpler city and shops','New character cosmetics','Complete removal of unnecessary statistics:','  Corruption, Cooldowns','Removed unnecessary items:','  Camera & Camera Glasses — you can now freely watch kids\' POV','Removed access to Victoria\'s house','  Victoria will now come over to visit instead'] },
-          { id: 'bbm_10', ver: 'v0.10', items: ['Added school crossover from Back Again','Added new workplaces: school office and classroom','Added sex scene in classroom with the boys','Added blowjob scene in the office with the boys','Added Rich, Nicolette, Lisa cameo from Back Again','Added Mall with window shopping ($100, -5 stress)','Changed gameplay: working adds +1 stress to MC','Changed the electric shop in the mall','Added 7 new quests for MC','Updated visuals for Tyler, Ed, Jasper','Minor bug fixes','Android port added'] },
-          { id: 'bbm_9', ver: 'v0.9', items: ['Added Beach, Pub (workplace), Gloryhole (pub)','Added Cherie DeVille as new character','Added Aubrey Black as new character (Tanya)','Added 5 new quests each to Jasper & Ed','New graphical improvements','Added neighborhood and gym','Added new videos to Jasper & Ed cam glass','Added Cherie DeVille to messenger and as masseur','Minor bug fixes'] },
-          { id: 'bbm_8', ver: 'v0.8', items: ['Victoria\'s house added','Spycam system added','12 new missions added','City added with electronics shop','Office/work reworked with random events','Ava\'s arousal extended from 15 to 17','Corruption increased from 5 to 6','Added Victoria to the map (WIP)','Added spy camera content','Added Victoria messenger (3 types of nudes)','Added 7 types of pornography to TV (midnight, 5x/day arousal)'] },
-          { id: 'bbm_7', ver: 'v0.7', items: ['238 new videos added','10+ replayable sex scenes added','New missions: 9 Tyler, 6 Ed, 4 Jasper, 6 Bella','Fully randomized sex scenes between Bella and the boys','Aphrodisiac added (+3 arousal to kids, +1 to MC)','Major bugs fixed, early game messages/nudes fixed','Fully randomized Bella & Ava lesbian event','New income: OnlyFans with Jasper','Some sex scene requirements nerfed','80 new pictures, new video mechanics','Random masturbation scenes for Bella & Boys','Ava & Bella & Xander threesome added'] },
-          { id: 'bbm_6', ver: 'v0.6', items: ['Added 4 quests to Bella, new character: Bella\'s boyfriend','2 sex scenes: Ed & Xander','Cooldown system implemented for some quests','Messenger system with random scenarios and tons of pictures','Background rework: Ed random appearances, Bella night kitchen visits','Holiday decorations removed','Chore automation for Bella (corruption cap: level 4)','Skip first week option, auto-complete free time'] },
-          { id: 'bbm_5', ver: 'v0.5', items: ['60 new pictures, 101 new videos','Added shower sex for each boy (unique scenes)','New sex locations: Tyler (garden), Ed (living room), Jasper (kitchen)','Corruption optimized to level 5','New quests for each boy unlocking new locations','Sun tanning scene extended with Tyler sunscreen','Added videos to peep after neighbor','Unlockable & repeatable Christmas sex event','Optimized arousal/stress mechanics','Nude wear added (+1 arousal to family)','Stress level now affects interactions (max 25 blocks interaction)','New phone wallpapers, holiday decorations, menu pictures'] },
-          { id: 'bbm_4', ver: 'v0.4', items: ['Tons of new pictures and videos','New character: Victoria Lobov (neighbour)','Many new quests added (except Abella)','Repeatable sex added','New quest system for Ava (MC)','Tons of bugs fixed','Daily delivery event (preventable)','Neighbour peep added (vice versa)','Map expanded, balcony added with flashing'] },
-          { id: 'bbm_3', ver: 'v0.3', items: ['Minor bug fixes, time teleport, job assign, spelling','Reworked job application mechanic','Updated patreon/subscribestar member list','Updated pool dialogue, GUI arrows, clothing system','Random events: Jasper peeps Bella, bathroom sex, Ed panty sniffing, boys sneaking in at night, favour requests','Added door lock feature at night','Added blowjobs to the boys','New quests: 8 Tyler, 6 Ed, 5 Jasper','130 new pictures, 62 new videos'] },
-          { id: 'bbm_2', ver: 'v0.2', items: ['Updated GUI: orange \'!\' markers, character markers, red stress indicators, quick taskbar','Fixed naming bugs, character locations, spelling, quest loops, task persistence','Auto-teleport to bedroom at late night','30 new quests, complete quest/task system rework','Corruption/arousal/stress system balanced','80+ images, 11 videos added','Patreon phone wallpapers, purchasable items optimized','Randomized masturbation & sex events','Peep, tease, and act systems implemented'] },
-          { id: 'bbm_1', ver: 'v0.1', items: ['Initial Release'] }
-        ]
+    async function fetchChangelogs() {
+      for (const game of CL_GAMES) {
+        try {
+          const res = await fetch(game.file + '?t=' + Date.now());
+          if (!res.ok) { console.warn('Could not load ' + game.file); continue; }
+          const text = await res.text();
+          changelogData[game.id] = parseChangelogMd(text);
+        } catch (err) {
+          console.warn('Failed to fetch ' + game.file + ':', err);
+        }
+      }
+    }
+
+    // ═══════════ Patron .md Parser ═══════════
+    function parsePatronsMd(text) {
+      const tiers = {};
+      let currentTier = null;
+      const tierMap = {
+        'ULTIMATE': 'ultimate',
+        'SUPPORT': 'support',
+        'PATRON': 'patron',
+        'TIPPER': 'tipper'
       };
+      for (const line of text.split('\n')) {
+        // Match tier headers like "--- U L T I M A T E ---"
+        const tierMatch = line.match(/---\s*([A-Z\s]+?)\s*---/);
+        if (tierMatch) {
+          const raw = tierMatch[1].replace(/\s+/g, '');
+          currentTier = tierMap[raw] || raw.toLowerCase();
+          if (!tiers[currentTier]) tiers[currentTier] = [];
+          continue;
+        }
+        if (!currentTier) continue;
+        // Parse comma-separated names
+        const names = line.split(',').map(n => n.trim()).filter(n => n.length > 0);
+        tiers[currentTier].push(...names);
+      }
+      return tiers;
     }
 
-    // Init changelog data
-    if (!getChangelogs()) saveChangelogs(seedChangelogs());
+    async function fetchPatrons() {
+      try {
+        const res = await fetch('patrons.md?t=' + Date.now());
+        if (!res.ok) return {};
+        const text = await res.text();
+        return parsePatronsMd(text);
+      } catch (err) {
+        console.warn('Failed to fetch patrons.md:', err);
+        return {};
+      }
+    }
 
     // ═══════════ Render Changelogs ═══════════
     const chevronSvg = '<svg class="changelog-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
@@ -1499,7 +1606,7 @@
         });
       }
 
-      saveChangelogs(data);
+      // Modified in-memory — to persist, update the .md file on your server
       clModalClose();
       activeTab = game;
       renderChangelogs();
@@ -1510,7 +1617,6 @@
       const ver = data[game][idx].ver;
       if (!confirm('Delete ' + ver + ' from changelog?')) return;
       data[game].splice(idx, 1);
-      saveChangelogs(data);
       renderChangelogs();
     }
 
@@ -1701,9 +1807,47 @@
       }
     }
 
+    // ═══════════════════════════════════════════
+    // ═══════════ PATRON TICKER RENDER ═══════════
+    // ═══════════════════════════════════════════
+    function renderPatronTicker(patrons) {
+      const track = document.getElementById('patron-track');
+      if (!track || Object.keys(patrons).length === 0) return;
+      const tierMap = {
+        ultimate: { label: 'Ultimate', cls: 'tier-ultimate' },
+        support:  { label: 'Support',  cls: 'tier-support' },
+        patron:   { label: 'Patron',   cls: 'tier-patron' },
+        tipper:   { label: 'Tipper',   cls: 'tier-tipper' }
+      };
+      let html = '';
+      for (const [tier, names] of Object.entries(patrons)) {
+        const t = tierMap[tier] || { label: tier, cls: '' };
+        names.forEach(name => {
+          html += '<span><span class="tier-badge ' + t.cls + '">' + t.label + '</span>' + escapeHtml(name) + '</span>';
+        });
+      }
+      // Duplicate for seamless infinite scroll
+      track.innerHTML = html + html;
+      const totalNames = Object.values(patrons).flat().length;
+      const duration = Math.max(60, totalNames * 0.7);
+      track.style.setProperty('--ticker-duration', duration + 's');
+      track.parentElement.style.setProperty('--ticker-duration', duration + 's');
+    }
+
     // ═══════════ Init ═══════════
-    renderChangelogs();
-    seedIfEmpty().then(() => renderReviews());
+    (async () => {
+      // Fetch changelogs from .md files, then render
+      await fetchChangelogs();
+      renderChangelogs();
+
+      // Fetch patrons from .md file, then render ticker
+      const patrons = await fetchPatrons();
+      renderPatronTicker(patrons);
+
+      // Reviews (Firebase)
+      await seedIfEmpty();
+      await renderReviews();
+    })();
   </script>
 </body>
 </html>
