@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>[BigBoyGames] — Adult Game Developer</title>
   <meta name="description" content="Independent adult game developer — portfolio, games, and dev updates." />
-  <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
@@ -66,6 +65,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 200px;
+      will-change: transform;
     }
 
     /* ═══════════════ HEADER ═══════════════ */
@@ -77,6 +77,7 @@
       background: rgba(8, 8, 10, 0.8);
       backdrop-filter: blur(20px) saturate(1.2);
       border-bottom: 1px solid var(--border);
+      will-change: transform;
     }
     .header-inner {
       max-width: var(--max-w); margin: 0 auto; width: 100%;
@@ -226,7 +227,7 @@
     }
 
     /* ═══════════════ SECTIONS ═══════════════ */
-    .section { padding: clamp(80px, 10vw, 120px) 0; }
+    .section { padding: clamp(80px, 10vw, 120px) 0; content-visibility: auto; contain-intrinsic-size: auto 800px; }
     .section-header { margin-bottom: 56px; }
     .section-label {
       display: inline-flex; align-items: center; gap: 8px;
@@ -248,6 +249,7 @@
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden;
       transition: all 0.35s var(--ease); position: relative;
+      contain: layout style;
     }
     .game-card:hover {
       border-color: var(--border-hover); background: var(--bg-card-hover);
@@ -263,6 +265,7 @@
       display: flex;
       transition: transform 0.45s var(--ease);
       will-change: transform;
+      backface-visibility: hidden;
     }
     .gallery-track img {
       width: 100%; aspect-ratio: 16/10; object-fit: cover; flex-shrink: 0;
@@ -534,12 +537,13 @@
     /* ═══════════════ REVIEWS ═══════════════ */
     .reviews-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-      margin-bottom: 36px;
+      margin-bottom: 36px; align-items: start;
     }
     .review-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 14px; padding: 24px;
       transition: border-color 0.2s ease;
+      contain: layout style;
     }
     .review-card:hover { border-color: var(--border-hover); }
     .review-card-top {
@@ -556,8 +560,6 @@
     }
     .review-text {
       font-size: 14px; color: var(--text-muted); line-height: 1.6;
-      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
-      overflow: hidden;
     }
     .review-author {
       margin-top: 12px; font-size: 12px; font-weight: 600;
@@ -811,6 +813,7 @@
     .patron-ticker-track {
       display: flex; animation: tickerScroll var(--ticker-duration, 120s) linear infinite;
       padding-left: 140px;
+      will-change: transform; backface-visibility: hidden;
     }
     .patron-ticker:hover .patron-ticker-track { animation-play-state: paused; }
     .patron-ticker-track span {
@@ -859,6 +862,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <script>
     firebase.initializeApp({
+      // PASTE YOUR CONFIG HERE
       // PASTE YOUR CONFIG HERE
       apiKey: "AIzaSyDbYjTixuUXMKx9FTBA4ELkS2oiiEf1BdY",
       authDomain: "bigboygames-reviews.firebaseapp.com",
@@ -1037,7 +1041,7 @@
               <p>A sprawling open-world experience packed with locations, characters, and endless possibilities. You play as a young man given a miraculous second chance — sent back to relive his youth with full knowledge of what's to come. This time, he's determined to seize every opportunity he once let slip away. Explore an entire city, build relationships on your own terms, and carve out the life you always wanted across a massive sandbox world.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="#" data-download="Back Again" target="_blank" class="game-link">
+                <a href="https://gofile.io/d/m8GFtA" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1082,7 +1086,7 @@
               <p>Step into the life of a resilient single mother who, after the tragic loss of her husband, must raise four children on her own — three energetic boys and a curious girl. Set in an era where societal norms and expectations pose their own challenges, the game explores a mother's love, sacrifice, and unwavering commitment to her family through arcade-style sandbox gameplay.</p>
               <div class="game-card-footer">
                 <span class="game-engine">Ren'Py</span>
-                <a href="#" data-download="Best Bad Mom" target="_blank" class="game-link">
+                <a href="https://gofile.io/d/sLWy1a" target="_blank" class="game-link">
                   Download
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 </a>
@@ -1166,6 +1170,9 @@
           </div>
 
           <textarea class="review-textarea" id="review-text" placeholder="Share your thoughts on the games..." maxlength="500"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:-10px;margin-bottom:12px;">
+            <span id="review-char-count" style="font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:0.02em;">0 / 500</span>
+          </div>
 
           <div class="review-form-row">
             <button class="btn btn-primary" id="review-submit" onclick="submitReview()">
@@ -1270,14 +1277,21 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // ═══════════ Active nav highlight ═══════════
+    // ═══════════ Active nav highlight (rAF-throttled) ═══════════
     const sects = document.querySelectorAll('section[id]');
     const navAs = document.querySelectorAll('.site-nav a');
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      let cur = '';
-      sects.forEach(s => { if (scrollY >= s.offsetTop - 100) cur = s.id; });
-      navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
-    });
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          let cur = '';
+          sects.forEach(s => { if (scrollY >= s.offsetTop - 100) cur = s.id; });
+          navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }, { passive: true });
 
     // ═══════════════════════════════════════════════════════
     // ═══════════ ADMIN AUTH (SHA-256 hash based) ═══════════
@@ -1705,6 +1719,7 @@
         formTitle.textContent = 'Edit Your Review';
         submitBtn.textContent = 'Update Review';
         document.getElementById('review-text').value = existing.text;
+        charCount.textContent = existing.text.length + ' / 500';
         const radio = document.querySelector('input[name="rating"][value="' + existing.rating + '"]');
         if (radio) radio.checked = true;
       } else {
@@ -1825,33 +1840,25 @@
       track.parentElement.style.setProperty('--ticker-duration', dur + 's');
     }
 
-    // ═══════════ Download Links from Markdown ═══════════
-    async function fetchDownloadLinks() {
-      try {
-        const res = await fetch('download.md?t=' + Date.now());
-        if (!res.ok) return;
-        const text = await res.text();
-        const links = {};
-        for (const line of text.split('\n')) {
-          const match = line.match(/^(.+?):\s*(https?:\/\/\S+)/);
-          if (match) {
-            links[match[1].trim()] = match[2].trim();
-          }
-        }
-        document.querySelectorAll('a[data-download]').forEach(el => {
-          const key = el.getAttribute('data-download');
-          if (links[key]) {
-            el.href = links[key];
-          }
-        });
-      } catch (err) {
-        console.warn('Failed to fetch download.md', err);
-      }
-    }
+    // ═══════════ Lazy-load gallery images ═══════════
+    document.querySelectorAll('.gallery-track').forEach(track => {
+      track.querySelectorAll('img').forEach((img, i) => {
+        img.decoding = 'async';
+        if (i > 0) img.loading = 'lazy';
+      });
+    });
+
+    // ═══════════ Review character counter ═══════════
+    const reviewTextArea = document.getElementById('review-text');
+    const charCount = document.getElementById('review-char-count');
+    reviewTextArea.addEventListener('input', () => {
+      const len = reviewTextArea.value.length;
+      charCount.textContent = len + ' / 500';
+      charCount.style.color = len >= 450 ? (len >= 500 ? '#e05555' : 'var(--accent)') : 'var(--text-dim)';
+    });
 
     // ═══════════ Init ═══════════
     (async () => {
-      await fetchDownloadLinks();
       await fetchChangelogs();
       renderChangelogs();
       const patrons = await fetchPatrons();
