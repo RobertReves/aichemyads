@@ -8,6 +8,7 @@
 //   1. Go to https://emn178.github.io/online-tools/sha256.html
 //   2. Type your new password and copy the hash
 //   3. Replace the hash below
+//   4. Ctrl+Shift+A
 //
 // Current password: BigBoy2026!  ← DELETE THIS COMMENT after you memorize it!
 // ═══════════════════════════════════════════
