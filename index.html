@@ -65,7 +65,6 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 200px;
-      will-change: transform;
     }
 
     /* ═══════════════ HEADER ═══════════════ */
@@ -77,7 +76,6 @@
       background: rgba(8, 8, 10, 0.8);
       backdrop-filter: blur(20px) saturate(1.2);
       border-bottom: 1px solid var(--border);
-      will-change: transform;
     }
     .header-inner {
       max-width: var(--max-w); margin: 0 auto; width: 100%;
@@ -227,7 +225,7 @@
     }
 
     /* ═══════════════ SECTIONS ═══════════════ */
-    .section { padding: clamp(80px, 10vw, 120px) 0; content-visibility: auto; contain-intrinsic-size: auto 800px; }
+    .section { padding: clamp(80px, 10vw, 120px) 0; }
     .section-header { margin-bottom: 56px; }
     .section-label {
       display: inline-flex; align-items: center; gap: 8px;
@@ -249,7 +247,6 @@
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden;
       transition: all 0.35s var(--ease); position: relative;
-      contain: layout style;
     }
     .game-card:hover {
       border-color: var(--border-hover); background: var(--bg-card-hover);
@@ -265,7 +262,6 @@
       display: flex;
       transition: transform 0.45s var(--ease);
       will-change: transform;
-      backface-visibility: hidden;
     }
     .gallery-track img {
       width: 100%; aspect-ratio: 16/10; object-fit: cover; flex-shrink: 0;
@@ -536,14 +532,15 @@
 
     /* ═══════════════ REVIEWS ═══════════════ */
     .reviews-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-      margin-bottom: 36px; align-items: start;
+      column-count: 3; column-gap: 16px;
+      margin-bottom: 36px;
     }
     .review-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 14px; padding: 24px;
       transition: border-color 0.2s ease;
-      contain: layout style;
+      break-inside: avoid; margin-bottom: 16px;
+      position: relative;
     }
     .review-card:hover { border-color: var(--border-hover); }
     .review-card-top {
@@ -560,6 +557,8 @@
     }
     .review-text {
       font-size: 14px; color: var(--text-muted); line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .review-author {
       margin-top: 12px; font-size: 12px; font-weight: 600;
@@ -647,7 +646,7 @@
     /* No reviews */
     .reviews-empty {
       text-align: center; padding: 40px 20px; color: var(--text-dim);
-      font-size: 14px;
+      font-size: 14px; column-span: all;
     }
 
     /* Admin panel */
@@ -681,6 +680,62 @@
     .review-card .admin-check.checked {
       background: #e05555; border-color: #e05555;
     }
+
+    /* ═══════════════ REVIEW BADGE ═══════════════ */
+    .review-badge {
+      position: absolute; top: 12px; right: 12px; z-index: 2;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; padding: 3px 9px; border-radius: 5px;
+      line-height: 1.3; white-space: nowrap;
+    }
+    .admin-badge-btn {
+      display: none; position: absolute; top: 12px; right: 12px; z-index: 3;
+      font-size: 11px; padding: 3px 8px; border-radius: 5px;
+      background: var(--bg); border: 1px dashed var(--border);
+      color: var(--text-dim); cursor: pointer; transition: all 0.15s ease;
+    }
+    .review-card:hover .admin-badge-btn { right: 12px; }
+    .admin-badge-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .admin-mode .admin-badge-btn { display: block; }
+    .admin-mode .review-badge + .admin-badge-btn { top: auto; bottom: 60px; }
+
+    /* Badge editor popover */
+    .badge-editor {
+      position: absolute; top: 10px; right: 10px; z-index: 10;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px; width: 200px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      display: none;
+    }
+    .badge-editor.open { display: block; }
+    .badge-editor-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .badge-editor-row input[type="text"] {
+      flex: 1; padding: 6px 8px; border-radius: 6px; font-size: 12px;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--font-body);
+    }
+    .badge-editor-row input[type="text"]:focus { outline: none; border-color: var(--accent); }
+    .badge-editor-row input[type="color"] {
+      width: 30px; height: 30px; border: 1px solid var(--border);
+      border-radius: 6px; background: var(--bg); cursor: pointer; padding: 1px; flex-shrink: 0;
+    }
+    .badge-editor-actions { display: flex; gap: 4px; }
+    .badge-editor-actions button {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 5px;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .badge-save {
+      background: var(--tag-bg); border: 1px solid var(--tag-border); color: var(--accent);
+    }
+    .badge-save:hover { background: rgba(201,164,97,0.15); }
+    .badge-remove {
+      background: rgba(220,50,50,0.08); border: 1px solid rgba(220,50,50,0.2); color: #e05555;
+    }
+    .badge-remove:hover { background: rgba(220,50,50,0.15); }
+    .badge-cancel {
+      background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+    }
+    .badge-cancel:hover { background: rgba(255,255,255,0.03); }
 
     /* ═══════════════ FOOTER ═══════════════ */
     .site-footer { border-top: 1px solid var(--border); padding: 32px 0; }
@@ -718,7 +773,7 @@
       .site-nav { display: none; }
       .nav-toggle { display: block; }
       .games-grid { grid-template-columns: 1fr; }
-      .reviews-grid { grid-template-columns: 1fr; }
+      .reviews-grid { column-count: 1; }
       .changelog-tabs { overflow-x: auto; }
       .hero-intro-top { flex-direction: column; }
       .hero-socials { width: 100%; }
@@ -813,7 +868,6 @@
     .patron-ticker-track {
       display: flex; animation: tickerScroll var(--ticker-duration, 120s) linear infinite;
       padding-left: 140px;
-      will-change: transform; backface-visibility: hidden;
     }
     .patron-ticker:hover .patron-ticker-track { animation-play-state: paused; }
     .patron-ticker-track span {
@@ -862,7 +916,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <script>
     firebase.initializeApp({
-      // PASTE YOUR CONFIG HERE
       // PASTE YOUR CONFIG HERE
       apiKey: "AIzaSyDbYjTixuUXMKx9FTBA4ELkS2oiiEf1BdY",
       authDomain: "bigboygames-reviews.firebaseapp.com",
@@ -1170,9 +1223,6 @@
           </div>
 
           <textarea class="review-textarea" id="review-text" placeholder="Share your thoughts on the games..." maxlength="500"></textarea>
-          <div style="display:flex;justify-content:flex-end;margin-top:-10px;margin-bottom:12px;">
-            <span id="review-char-count" style="font-size:11px;font-weight:600;color:var(--text-dim);letter-spacing:0.02em;">0 / 500</span>
-          </div>
 
           <div class="review-form-row">
             <button class="btn btn-primary" id="review-submit" onclick="submitReview()">
@@ -1277,21 +1327,14 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // ═══════════ Active nav highlight (rAF-throttled) ═══════════
+    // ═══════════ Active nav highlight ═══════════
     const sects = document.querySelectorAll('section[id]');
     const navAs = document.querySelectorAll('.site-nav a');
-    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      if (!scrollTicking) {
-        requestAnimationFrame(() => {
-          let cur = '';
-          sects.forEach(s => { if (scrollY >= s.offsetTop - 100) cur = s.id; });
-          navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
-          scrollTicking = false;
-        });
-        scrollTicking = true;
-      }
-    }, { passive: true });
+      let cur = '';
+      sects.forEach(s => { if (scrollY >= s.offsetTop - 100) cur = s.id; });
+      navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
+    });
 
     // ═══════════════════════════════════════════════════════
     // ═══════════ ADMIN AUTH (SHA-256 hash based) ═══════════
@@ -1681,6 +1724,7 @@
 
     async function renderReviews() {
       const reviews = await getReviews();
+      const badges = await getAllBadges();
       const grid = document.getElementById('reviews-grid');
       const emptyMsg = document.getElementById('reviews-empty');
       const uid = getUserId();
@@ -1693,7 +1737,31 @@
         [...reviews].reverse().forEach(r => {
           const card = document.createElement('div');
           card.className = 'review-card' + (selectedIds.has(r.id) ? ' admin-selected' : '');
+
+          const badge = badges[r.id];
+          let badgeHtml = '';
+          if (badge && badge.text) {
+            const bg = getLabelColor(badge.color, 0.12);
+            const border = getLabelColor(badge.color, 0.35);
+            badgeHtml = '<span class="review-badge" style="background:' + bg + ';border:1px solid ' + border + ';color:' + badge.color + ';">' + escapeHtml(badge.text) + '</span>';
+          }
+
+          const adminBtnLabel = badge && badge.text ? '✎' : '+ tag';
+
           card.innerHTML =
+            badgeHtml +
+            '<button class="admin-badge-btn" data-rid="' + r.id + '">' + adminBtnLabel + '</button>' +
+            '<div class="badge-editor" id="be-' + r.id + '">' +
+              '<div class="badge-editor-row">' +
+                '<input type="text" placeholder="Label text..." maxlength="20" value="' + escapeAttr(badge ? badge.text : '') + '" class="be-text" />' +
+                '<input type="color" value="' + (badge ? badge.color : '#c9a461') + '" class="be-color" />' +
+              '</div>' +
+              '<div class="badge-editor-actions">' +
+                '<button class="badge-save" data-rid="' + r.id + '">Save</button>' +
+                '<button class="badge-remove" data-rid="' + r.id + '">Remove</button>' +
+                '<button class="badge-cancel" data-rid="' + r.id + '">✕</button>' +
+              '</div>' +
+            '</div>' +
             '<div class="review-card-top">' +
               '<div class="review-stars">' + makeStars(r.rating, 16) + '</div>' +
               '<div style="display:flex;align-items:center;gap:8px;">' +
@@ -1703,10 +1771,32 @@
             '</div>' +
             '<div class="review-text">' + escapeHtml(r.text) + '</div>' +
             '<div class="review-author">Anonymous Player</div>';
+
           grid.insertBefore(card, emptyMsg);
+
           card.querySelector('.admin-check')?.addEventListener('click', function() {
             if (selectedIds.has(r.id)) selectedIds.delete(r.id); else selectedIds.add(r.id);
             renderReviews();
+          });
+
+          // Badge editor toggle
+          card.querySelector('.admin-badge-btn')?.addEventListener('click', () => {
+            document.querySelectorAll('.badge-editor.open').forEach(e => e.classList.remove('open'));
+            card.querySelector('.badge-editor').classList.add('open');
+          });
+          card.querySelector('.badge-save')?.addEventListener('click', async () => {
+            const text = card.querySelector('.be-text').value.trim();
+            const color = card.querySelector('.be-color').value;
+            if (text) await saveBadge(r.id, { text, color });
+            else await removeBadge(r.id);
+            await renderReviews();
+          });
+          card.querySelector('.badge-remove')?.addEventListener('click', async () => {
+            await removeBadge(r.id);
+            await renderReviews();
+          });
+          card.querySelector('.badge-cancel')?.addEventListener('click', () => {
+            card.querySelector('.badge-editor').classList.remove('open');
           });
         });
       }
@@ -1719,7 +1809,6 @@
         formTitle.textContent = 'Edit Your Review';
         submitBtn.textContent = 'Update Review';
         document.getElementById('review-text').value = existing.text;
-        charCount.textContent = existing.text.length + ' / 500';
         const radio = document.querySelector('input[name="rating"][value="' + existing.rating + '"]');
         if (radio) radio.checked = true;
       } else {
@@ -1840,21 +1929,35 @@
       track.parentElement.style.setProperty('--ticker-duration', dur + 's');
     }
 
-    // ═══════════ Lazy-load gallery images ═══════════
-    document.querySelectorAll('.gallery-track').forEach(track => {
-      track.querySelectorAll('img').forEach((img, i) => {
-        img.decoding = 'async';
-        if (i > 0) img.loading = 'lazy';
-      });
-    });
+    // ═══════════════════════════════════════════
+    // ═══════════ REVIEW BADGES ═══════════
+    // ═══════════════════════════════════════════
+    function getLabelColor(hex, alpha) {
+      const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+    }
+    function escapeAttr(s) { return s ? s.replace(/"/g, '&quot;').replace(/'/g, '&#39;') : ''; }
 
-    // ═══════════ Review character counter ═══════════
-    const reviewTextArea = document.getElementById('review-text');
-    const charCount = document.getElementById('review-char-count');
-    reviewTextArea.addEventListener('input', () => {
-      const len = reviewTextArea.value.length;
-      charCount.textContent = len + ' / 500';
-      charCount.style.color = len >= 450 ? (len >= 500 ? '#e05555' : 'var(--accent)') : 'var(--text-dim)';
+    async function getAllBadges() {
+      try {
+        const snap = await db.ref('review_badges').once('value');
+        return snap.val() || {};
+      } catch (err) { console.error('Badges read error:', err); return {}; }
+    }
+    async function saveBadge(reviewId, badge) {
+      try { await db.ref('review_badges/' + reviewId).set(badge); }
+      catch (err) { console.error('Badge save error:', err); }
+    }
+    async function removeBadge(reviewId) {
+      try { await db.ref('review_badges/' + reviewId).remove(); }
+      catch (err) { console.error('Badge remove error:', err); }
+    }
+
+    // Close badge editors when clicking outside
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.badge-editor') && !e.target.closest('.admin-badge-btn')) {
+        document.querySelectorAll('.badge-editor.open').forEach(el => el.classList.remove('open'));
+      }
     });
 
     // ═══════════ Init ═══════════
