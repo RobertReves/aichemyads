@@ -1,3 +1,41 @@
+ChangeLog 0.15:
+ - GRIND REDUCED GREATLY
+ - added +2 room to office
+ - fixed bug where the player can't leave the sex scene in Kendra garage sex quest
+ - fixed bug where the menu dissappears after choosing a language
+ - fixed bug where the wallpapers arent stored properly in the save files, now they are
+    - the game automatically sets itself to English at each start
+ - added languages:
+    - English (default)
+    - Russian
+    - Spanish
+    - Hungarian
+    - German
+    - Polish
+    - French 
+    - Br Portuguese 
+    - Italian
+ - planning to add:
+    - Korean (currently the font does not support Korean)
+ - graphical update:
+    - night variant given to all interiors
+ - changed font so it supports multiple languages
+ - added button to instant play the quests in phone
+ - replays are way more consistent regarding the time of the day
+ - added 'complete all' button in phone, so the players who want a quick and good wank, just hit it and the game unlocks itself fully, wallpapers too
+ - added new job: Office
+ - added 10 new quests to Angela
+ - added Angela as a final character (she is not W.I.P anymore)
+ - added 2 blowjob scenes to Angela
+ - added 1 sex scene to Angela
+ - added time requirements to each quest in quest menu
+ - added robbery event to Taxi work, added Lacey Jayne hospital sex after robbery.
+    - two outcome possible:
+       - you have firearm: no money lose
+       - you don't have firearm: lose all your money
+ - durability added to item(s):
+    - Firearm (max 5 durability)
+
 ChangeLog 0.14:
  - minor bug fixes
     - fixed small bug with Brandi where Brandi and Kendra were always having a lesbian affair, locking out the player from the room
