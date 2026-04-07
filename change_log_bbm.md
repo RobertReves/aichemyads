@@ -6,6 +6,12 @@ v0.12
  - added clickable rooms on the map
  - added chores and interactable object to the map
  - downsized all characters by 10% on screen. now they wont consume all the available space in each room. diaalogues remain the same
+ - fixed bug where Player couldn't earn money by working in the office
+ - minor bug fixes
+ - added 12 new quests to Tyler
+ - added 1 new sex scene in the school office (Ed,Tyler,Jasper)
+ - added 1 new sex scene to Rich
+ - added 20 new messenger nudes to Rich
 
 v0.11
  - complete structure overhaul
