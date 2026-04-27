@@ -1,3 +1,16 @@
+ChangeLog 0.16:
+ - minor bug fixes
+ - code structure upgrade
+ - Kendra smalltalk and written text upgrade
+ - added chracter:
+    - Rose Monroe (Maid at MC's house)
+ - added quest debugger into options - if you stuck with a quest, use it to progress
+ - added Rose Monroe into social media
+ - added 7 quests to Rose
+ - added 2 sex scenes to Rose
+ - Added better small talks to Rose
+ - removed German transaltion because it has a game breaking bug - will be fixed in the future
+
 ChangeLog 0.15:
  - GRIND REDUCED GREATLY
  - added +2 room to office
