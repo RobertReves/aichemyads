@@ -1,3 +1,20 @@
+ChangeLog 0.17:
+ - minor bug fixes
+ - fixed major bug: cheat menu after Rose arrive
+ - Rose's starter quest reworked, it won't be random anymore
+ - added 7 new quests to Kendra
+ - added 8 new sex scenes to Kendra
+    - Gym: 1 NTR, 1 sex scene
+    - Nighclub: 1 threesome
+    - Park's swimming pool
+    - Home's both bathroom
+    - Park's coffee shop (trail)
+    - Office: She randomly visits you while working
+    - Restaurant
+ - removed quest debugger, it caused issues in some cases
+ - preworked for future DB upgrades
+ - compressed the whole game from 12GB to 4.8GB
+
 ChangeLog 0.16:
  - minor bug fixes
  - code structure upgrade
